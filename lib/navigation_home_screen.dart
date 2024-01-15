@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './app_theme.dart';
+import './home_screen.dart';
 import 'custom_drawer/drawer_user_controller.dart';
 
 class NavigationHomeScreen extends StatefulWidget {
@@ -26,7 +27,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
             //   changeIndex(drawerIndexdata);
             //   //callback from drawer for replace screen as user need with passing DrawerIndex(Enum index)
             // },
-            // screenView: screenView,
+            screenView: MyHomePage(title: 'my flutter music player'),
             //we replace screen view as we need on navigate starting screens like MyHomePage, HelpScreen, FeedbackScreen, etc...
           ),
         ),
