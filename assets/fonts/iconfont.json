@@ -1,0 +1,107 @@
+{
+  "id": "4411726",
+  "name": "flutter_musci_app",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "881790",
+      "name": "发现选择",
+      "font_class": "faxianxuanze",
+      "unicode": "e6e9",
+      "unicode_decimal": 59113
+    },
+    {
+      "icon_id": "3638335",
+      "name": "资源发现",
+      "font_class": "ziyuanfaxian",
+      "unicode": "e62a",
+      "unicode_decimal": 58922
+    },
+    {
+      "icon_id": "7450637",
+      "name": "视频2",
+      "font_class": "shipin",
+      "unicode": "e665",
+      "unicode_decimal": 58981
+    },
+    {
+      "icon_id": "7450649",
+      "name": "音乐",
+      "font_class": "yinle",
+      "unicode": "e667",
+      "unicode_decimal": 58983
+    },
+    {
+      "icon_id": "7588124",
+      "name": "音乐",
+      "font_class": "yinle1",
+      "unicode": "e624",
+      "unicode_decimal": 58916
+    },
+    {
+      "icon_id": "11391498",
+      "name": "歌单",
+      "font_class": "gedan1",
+      "unicode": "e636",
+      "unicode_decimal": 58934
+    },
+    {
+      "icon_id": "11391542",
+      "name": "音乐",
+      "font_class": "yinle2",
+      "unicode": "e63b",
+      "unicode_decimal": 58939
+    },
+    {
+      "icon_id": "14151871",
+      "name": "音乐",
+      "font_class": "yinle3",
+      "unicode": "e637",
+      "unicode_decimal": 58935
+    },
+    {
+      "icon_id": "14656453",
+      "name": "热门推荐",
+      "font_class": "rementuijian",
+      "unicode": "e73d",
+      "unicode_decimal": 59197
+    },
+    {
+      "icon_id": "16219685",
+      "name": "云音乐",
+      "font_class": "yunyinle",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "18371968",
+      "name": "视频，摄影",
+      "font_class": "shipinsheying",
+      "unicode": "e6c6",
+      "unicode_decimal": 59078
+    },
+    {
+      "icon_id": "18371996",
+      "name": "视频，电视",
+      "font_class": "shipindianshi",
+      "unicode": "e6ca",
+      "unicode_decimal": 59082
+    },
+    {
+      "icon_id": "18673393",
+      "name": "发现",
+      "font_class": "faxian",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "31503667",
+      "name": "网易云音乐",
+      "font_class": "apptubiao100-danse_wangyiyunyinle",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    }
+  ]
+}

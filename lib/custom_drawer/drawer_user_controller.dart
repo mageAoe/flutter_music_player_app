@@ -47,17 +47,18 @@ class _DrawerUserControllerState extends State<DrawerUserController> with Ticker
       body: SingleChildScrollView(
         controller: scrollController,
         scrollDirection: Axis.horizontal,
+        // physics 能够增加类似物理惯性的效果
         physics: const PageScrollPhysics(parent: ClampingScrollPhysics()),
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width + widget.drawerWidth,
           child: Row(
             children: [
+              // 侧边栏部分
               SizedBox(
                 width: widget.drawerWidth,
                 height: MediaQuery.of(context).size.height,
                 // AnimatedBuilder 来避免整个小部件树的重建，从而提高性能。它是通过将动画的部分包装在一个独立的小部件中，并在每次动画帧发生时进行重建
-                // child: const Text('data'),
                 child: AnimatedBuilder(
                   animation: iconAnimationController!,
                   builder: (BuildContext context, Widget? child) {
@@ -79,6 +80,7 @@ class _DrawerUserControllerState extends State<DrawerUserController> with Ticker
                   }
                 )
               ),
+              // 右边首页部分
               SizedBox(
                  width: MediaQuery.of(context).size.width, // 获取与给定BuildContext相关联的屏幕宽度
                  height: MediaQuery.of(context).size.height,
