@@ -98,4 +98,18 @@ class YunMusicFont {
     fontFamily: 'yunMusic',
     matchTextDirection : true
   );
+
+  // 播客
+  static const IconData boke = IconData(
+    0xe945,
+    fontFamily: 'yunMusic',
+    matchTextDirection : true
+  );
+
+  // 歌单
+  static const IconData gedan = IconData(
+    0xe64b,
+    fontFamily: 'yunMusic',
+    matchTextDirection : true
+  );
 }

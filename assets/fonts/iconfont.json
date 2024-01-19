@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "502405",
+      "name": "播客",
+      "font_class": "boke",
+      "unicode": "e945",
+      "unicode_decimal": 59717
+    },
+    {
+      "icon_id": "5249020",
+      "name": "歌单",
+      "font_class": "gedan",
+      "unicode": "e64b",
+      "unicode_decimal": 58955
+    },
+    {
+      "icon_id": "33523088",
+      "name": "歌单-copy",
+      "font_class": "hgd",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
       "icon_id": "881790",
       "name": "发现选择",
       "font_class": "faxianxuanze",

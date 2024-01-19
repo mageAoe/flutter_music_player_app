@@ -29,7 +29,7 @@ class TabIconData {
       animationController: null,
     ),
     TabIconData(
-      icon: YunMusicFont.yinle,
+      icon: YunMusicFont.gedan,
       selectedImagePath: YunMusicFont.faxianxuanze,
       index: 1,
       text: '歌单',
@@ -37,7 +37,7 @@ class TabIconData {
       animationController: null,
     ),
     TabIconData(
-      icon: YunMusicFont.rementuijian,
+      icon: YunMusicFont.faxian,
       selectedImagePath: YunMusicFont.faxianxuanze,
       index: 2,
       text: 'MV',
@@ -45,7 +45,7 @@ class TabIconData {
       animationController: null,
     ),
     TabIconData(
-      icon: YunMusicFont.faxian,
+      icon: YunMusicFont.yinle,
       selectedImagePath: YunMusicFont.faxianxuanze,
       index: 3,
       text: '我的',
