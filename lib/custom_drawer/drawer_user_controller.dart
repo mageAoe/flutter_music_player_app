@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import './home_drawer.dart';
 import 'package:flutter_music_player_app/app_theme.dart';
+import 'package:flutter_music_player_app/utlis/enum_setting.dart';
 
 class DrawerUserController extends StatefulWidget {
   final double drawerWidth;
   final Widget? screenView;
+  final DrawerIndex? screenIndex;
+  final Function(DrawerIndex)? onDrawerCall;
+
   const DrawerUserController({
     super.key,
     this.drawerWidth = 280,
     this.screenView,
+    this.onDrawerCall,
+    this.screenIndex,
   });
 
   @override
@@ -64,18 +70,29 @@ class _DrawerUserControllerState extends State<DrawerUserController> with Ticker
                   builder: (BuildContext context, Widget? child) {
                     return Transform(
                       transform: Matrix4.translationValues(scrollController!.offset, 0.0, 0.0),
-                      child: const HomeDrawer(
-                        // screenIndex: widget.screenIndex == null
-                        //     ? DrawerIndex.HOME
-                        //     : widget.screenIndex,
-                        // iconAnimationController: iconAnimationController,
-                        // callBackIndex: (DrawerIndex indexType) {
-                        //   onDrawerClick();
-                        //   try {
-                        //     widget.onDrawerCall!(indexType);
-                        //   } catch (e) {}
-                        // },
+                      // child: const Text("data"),
+                      child: HomeDrawer(
+                        iconAnimationController: iconAnimationController,
+                        screenIndex: DrawerIndex.HOME,
+                        callBackIndex: (DrawerIndex indexType) {
+                          onDrawerClick();
+                          try {
+                            widget.onDrawerCall!(indexType);
+                          } catch (e) {}
+                        }
                       ),
+                      // child: const HomeDrawer(
+                      //   // screenIndex: widget.screenIndex == null
+                      //   //     ? DrawerIndex.HOME
+                      //   //     : widget.screenIndex,
+                      //   // iconAnimationController: iconAnimationController,
+                      //   // callBackIndex: (DrawerIndex indexType) {
+                      //   //   onDrawerClick();
+                      //   //   try {
+                      //   //     widget.onDrawerCall!(indexType);
+                      //   //   } catch (e) {}
+                      //   // },
+                      // ),
                     );
                   }
                 )
@@ -109,5 +126,22 @@ class _DrawerUserControllerState extends State<DrawerUserController> with Ticker
         )
       ),
     );
+  }
+
+  void onDrawerClick() {
+    //if scrollcontroller.offset != 0.0 then we set to closed the drawer(with animation to offset zero position) if is not 1 then open the drawer
+    if (scrollController!.offset != 0.0) {
+      scrollController?.animateTo(
+        0.0,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.fastOutSlowIn,
+      );
+    } else {
+      scrollController?.animateTo(
+        widget.drawerWidth,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.fastOutSlowIn,
+      );
+    }
   }
 }
