@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 class AppTheme {
 
+  static const Color primary = Color.fromRGBO(230, 0,38, 1);
+
   static const Color notWhite = Color(0xFFEDF0F2);
   static const Color nearlyWhite = Color(0xFFFEFEFE);
   static const Color white = Color(0xFFFFFFFF);
