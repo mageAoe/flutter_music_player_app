@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_music_player_app/app_theme.dart';
 import 'package:flutter_music_player_app/utlis/enum_setting.dart';
+import 'package:flutter_music_player_app/custom_drawer/drawer_list.dart';
 class HomeDrawer extends StatefulWidget {
   final AnimationController? iconAnimationController;
   final DrawerIndex? screenIndex;
@@ -108,7 +109,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                             child: ClipRRect(
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(60.0)),
-                              child: Image.network('https://source.unsplash.com/random/720x480?random=4c75b593-629e-448a-bf59-25c7db717ba9'),
+                              child: Image.asset('assets/images/avatar.jpg'),
                             ),
                           ),
                         ),
@@ -185,7 +186,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                         )
                       : Icon(listData.icon?.icon,
                           color: widget.screenIndex == listData.index
-                              ? Colors.blue
+                              ? AppTheme.primary
                               : AppTheme.nearlyBlack),
                   const Padding(
                     padding: EdgeInsets.all(4.0),
@@ -196,7 +197,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       fontWeight: FontWeight.w500,
                       fontSize: 16,
                       color: widget.screenIndex == listData.index
-                          ? Colors.black
+                          ? AppTheme.primary
                           : AppTheme.nearlyBlack,
                     ),
                     textAlign: TextAlign.left,
@@ -223,7 +224,6 @@ class _HomeDrawerState extends State<HomeDrawer> {
                                 MediaQuery.of(context).size.width * 0.75 - 64,
                             height: 46,
                             decoration: BoxDecoration(
-                              // color: Colors.blue.withOpacity(0.2),
                               color: Colors.pink.withOpacity(0.3),
                               borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(0),
@@ -248,20 +248,4 @@ class _HomeDrawerState extends State<HomeDrawer> {
     widget.callBackIndex!(indexScreen);
   }
 
-}
-
-class DrawerList {
-  DrawerList({
-    this.isAssetsImage = false,
-    this.labelName = '',
-    this.icon,
-    this.index,
-    this.imageName = '',
-  });
-
-  String labelName;
-  Icon? icon;
-  bool isAssetsImage;
-  String imageName;
-  DrawerIndex? index;
 }

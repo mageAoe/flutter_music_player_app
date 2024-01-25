@@ -16,7 +16,7 @@ class NavigationHomeScreen extends StatefulWidget {
 
 class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
   Widget? screenView;
-   DrawerIndex? drawerIndex;
+  DrawerIndex? drawerIndex; // 切换当前展示界面
 
    @override
   void initState() {

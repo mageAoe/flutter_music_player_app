@@ -7,6 +7,7 @@ class DrawerUserController extends StatefulWidget {
   final double drawerWidth;
   final Widget? screenView;
   final DrawerIndex? screenIndex;
+  final Function(bool)? drawerIsOpen;
   final Function(DrawerIndex)? onDrawerCall;
 
   const DrawerUserController({
@@ -15,6 +16,7 @@ class DrawerUserController extends StatefulWidget {
     this.screenView,
     this.onDrawerCall,
     this.screenIndex,
+    this.drawerIsOpen,
   });
 
   @override
@@ -28,7 +30,6 @@ class DrawerUserController extends StatefulWidget {
 * TickerProviderStateMixin 初始化 animation 和 Controller的时候需要一个Ticke类型的参数Vsync
 */
 class _DrawerUserControllerState extends State<DrawerUserController> with TickerProviderStateMixin {
-
   ScrollController? scrollController;
   AnimationController? iconAnimationController;
   AnimationController? animationController;
@@ -43,6 +44,40 @@ class _DrawerUserControllerState extends State<DrawerUserController> with Ticker
     iconAnimationController ?.animateTo(1.0,duration: const Duration(milliseconds: 0),curve: Curves.fastOutSlowIn);
 
     scrollController = ScrollController(initialScrollOffset: widget.drawerWidth);
+    scrollController!
+      .addListener(() {
+        if (scrollController!.offset <= 0) {
+          if (scrolloffset != 1.0) {
+            setState(() {
+              scrolloffset = 1.0;
+              try {
+                widget.drawerIsOpen!(true);
+              } catch (_) {}
+            });
+          }
+          iconAnimationController?.animateTo(0.0,
+              duration: const Duration(milliseconds: 0),
+              curve: Curves.fastOutSlowIn);
+        } else if (scrollController!.offset > 0 &&
+            scrollController!.offset < widget.drawerWidth.floor()) {
+          iconAnimationController?.animateTo(
+              (scrollController!.offset * 100 / (widget.drawerWidth)) / 100,
+              duration: const Duration(milliseconds: 0),
+              curve: Curves.fastOutSlowIn);
+        } else {
+          if (scrolloffset != 0.0) {
+            setState(() {
+              scrolloffset = 0.0;
+              try {
+                widget.drawerIsOpen!(false);
+              } catch (_) {}
+            });
+          }
+          iconAnimationController?.animateTo(1.0,
+              duration: const Duration(milliseconds: 0),
+              curve: Curves.fastOutSlowIn);
+        }
+      });
 
     super.initState();
   }
@@ -70,10 +105,16 @@ class _DrawerUserControllerState extends State<DrawerUserController> with Ticker
                   builder: (BuildContext context, Widget? child) {
                     return Transform(
                       transform: Matrix4.translationValues(scrollController!.offset, 0.0, 0.0),
-                      // child: const Text("data"),
+                      // child: SizedBox(
+                      //   width: widget.drawerWidth,
+                      //   height: MediaQuery.of(context).size.height,
+                      //   child: const Center(
+                      //     child: Text('dada'),
+                      //   ),
+                      // ),
                       child: HomeDrawer(
                         iconAnimationController: iconAnimationController,
-                        screenIndex: DrawerIndex.HOME,
+                        screenIndex: widget.screenIndex,
                         callBackIndex: (DrawerIndex indexType) {
                           onDrawerClick();
                           try {
@@ -81,18 +122,6 @@ class _DrawerUserControllerState extends State<DrawerUserController> with Ticker
                           } catch (e) {}
                         }
                       ),
-                      // child: const HomeDrawer(
-                      //   // screenIndex: widget.screenIndex == null
-                      //   //     ? DrawerIndex.HOME
-                      //   //     : widget.screenIndex,
-                      //   // iconAnimationController: iconAnimationController,
-                      //   // callBackIndex: (DrawerIndex indexType) {
-                      //   //   onDrawerClick();
-                      //   //   try {
-                      //   //     widget.onDrawerCall!(indexType);
-                      //   //   } catch (e) {}
-                      //   // },
-                      // ),
                     );
                   }
                 )

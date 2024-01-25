@@ -150,12 +150,12 @@ class _TabIconsState extends State<TabIcons> {
                 Container(
                   padding: const EdgeInsets.all(3),
                   decoration: BoxDecoration(
-                    color: widget.index == widget.currentIndex? const Color.fromRGBO(230, 0,38, 1): null,
+                    color: widget.index == widget.currentIndex? AppTheme.primary : null,
                     borderRadius: BorderRadius.circular(15)
                   ),
                   child: Icon(widget.tabIconData?.icon, color: widget.index == widget.currentIndex? Colors.white : null),
                 ),
-                Text(widget.tabIconData!.text, style: TextStyle(color: widget.index == widget.currentIndex? const Color.fromRGBO(230, 0,38, 1): null))
+                Text(widget.tabIconData!.text, style: TextStyle(color: widget.index == widget.currentIndex? AppTheme.primary: null))
               ],
             )
           )
