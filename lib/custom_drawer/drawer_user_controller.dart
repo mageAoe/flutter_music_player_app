@@ -105,13 +105,6 @@ class _DrawerUserControllerState extends State<DrawerUserController> with Ticker
                   builder: (BuildContext context, Widget? child) {
                     return Transform(
                       transform: Matrix4.translationValues(scrollController!.offset, 0.0, 0.0),
-                      // child: SizedBox(
-                      //   width: widget.drawerWidth,
-                      //   height: MediaQuery.of(context).size.height,
-                      //   child: const Center(
-                      //     child: Text('dada'),
-                      //   ),
-                      // ),
                       child: HomeDrawer(
                         iconAnimationController: iconAnimationController,
                         screenIndex: widget.screenIndex,
