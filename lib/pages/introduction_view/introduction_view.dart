@@ -5,6 +5,9 @@ import 'package:flutter_music_player_app/pages/introduction_view/top_back_skip_v
 import 'package:flutter_music_player_app/pages/introduction_view/center_next_button.dart';
 import 'package:flutter_music_player_app/pages/introduction_view/components/splash_view.dart';
 import 'package:flutter_music_player_app/pages/introduction_view/components/relax_view.dart';
+import 'package:flutter_music_player_app/pages/introduction_view/components/care_view.dart';
+import 'package:flutter_music_player_app/pages/introduction_view/components/mood_diary_vew.dart';
+import 'package:flutter_music_player_app/pages/introduction_view/components/welcome_view.dart';
 
 class IntroductionAnimationScreen extends StatefulWidget {
   const IntroductionAnimationScreen({super.key});
@@ -28,6 +31,12 @@ class _IntroductionAnimationScreenState extends State<IntroductionAnimationScree
   }
 
   @override
+  void dispose() {
+    _animationController?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xffF7EBE1),
@@ -38,6 +47,15 @@ class _IntroductionAnimationScreenState extends State<IntroductionAnimationScree
               animationController: _animationController!,
             ),
             RelaxView(
+              animationController: _animationController!,
+            ),
+            CareView(
+              animationController: _animationController!,
+            ),
+            MoodDiaryVew(
+              animationController: _animationController!,
+            ),
+            WelcomeView(
               animationController: _animationController!,
             ),
             TopBackSkipView(
@@ -98,5 +116,6 @@ class _IntroductionAnimationScreenState extends State<IntroductionAnimationScree
   // 跳转路由
   void _signUpClick() {
     // Navigator.pop(context);
+    Navigator.of(context).pushReplacementNamed('/MainPage');
   }
 }

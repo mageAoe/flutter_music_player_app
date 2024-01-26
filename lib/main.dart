@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_music_player_app/navigation_home_screen.dart';
 import 'package:flutter_music_player_app/pages/introduction_view/introduction_view.dart';
 
+import 'package:flutter_music_player_app/test/slideTransition_demo.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -13,14 +15,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      // title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+      routes: {
+        '/MainPage': (ctx) => const NavigationHomeScreen(),
+      },
       // home: const NavigationHomeScreen(),
       home: const IntroductionAnimationScreen(),
+      // home: const MyHomePage(),
     );
   }
 }

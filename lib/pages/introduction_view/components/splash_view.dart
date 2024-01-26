@@ -12,15 +12,15 @@ class _SplashViewState extends State<SplashView> {
   @override
   Widget build(BuildContext context) {
     final introductionanimation =
-        Tween<Offset>(begin: const Offset(0, 0), end: const Offset(0.0, -1.0))
-            .animate(CurvedAnimation(
-      parent: widget.animationController,
-      curve: const Interval(
-        0.0,
-        0.2,
-        curve: Curves.fastOutSlowIn,
-      ),
-    ));
+      Tween<Offset>(begin: const Offset(0, 0), end: const Offset(0, -1)).animate(CurvedAnimation(
+          parent: widget.animationController,
+          curve: const Interval(
+            0.0,
+            0.2,
+            curve: Curves.fastOutSlowIn,
+          ),
+        )
+      );
     return SlideTransition(
       position: introductionanimation,
       child:  SingleChildScrollView(
@@ -57,6 +57,7 @@ class _SplashViewState extends State<SplashView> {
               child: InkWell(
                 onTap: () {
                   widget.animationController.animateTo(0.2);
+                  // widget.animationController.forward();
                 },
                 child: Container(
                   height: 58,
