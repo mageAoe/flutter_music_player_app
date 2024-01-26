@@ -21,7 +21,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
    @override
   void initState() {
     drawerIndex = DrawerIndex.HOME;
-    screenView =  const MyHomePage(title: '网易云音乐');
+    screenView =  const MyHomePage();
     super.initState();
   }
 
@@ -56,7 +56,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
       switch (drawerIndex) {
         case DrawerIndex.HOME:
           setState(() {
-            screenView = const MyHomePage(title: '网易云音乐');
+            screenView = const MyHomePage();
           });
           break;
         case DrawerIndex.Help:

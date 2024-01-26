@@ -24,8 +24,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/MainPage': (ctx) => const NavigationHomeScreen(),
       },
-      // home: const NavigationHomeScreen(),
-      home: const IntroductionAnimationScreen(),
+      home: const NavigationHomeScreen(),
+      // home: const IntroductionAnimationScreen(),
       // home: const MyHomePage(),
     );
   }

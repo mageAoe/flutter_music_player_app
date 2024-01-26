@@ -64,6 +64,12 @@ class _BottomBarViewState extends State<BottomBarView> with TickerProviderStateM
                                   index: widget.index,
                                   currentIndex: 0,
                                   tabIconData: widget.tabIconsList?[0],
+                                  // onTap: widget.changeIndex!(0),
+                                  removeAllSelect: () {
+                                    setRemoveAllSelection(
+                                        widget.tabIconsList?[0]);
+                                    widget.changeIndex!(0);
+                                  },
                                 )
                               ),
                               Expanded(
@@ -71,6 +77,12 @@ class _BottomBarViewState extends State<BottomBarView> with TickerProviderStateM
                                   index: widget.index,
                                   currentIndex: 1,
                                   tabIconData: widget.tabIconsList?[1],
+                                  // onTap: widget.changeIndex!(1),
+                                  removeAllSelect: () {
+                                    setRemoveAllSelection(
+                                        widget.tabIconsList?[1]);
+                                    widget.changeIndex!(1);
+                                  },
                                 ),
                               ),
                               SizedBox(
@@ -86,6 +98,11 @@ class _BottomBarViewState extends State<BottomBarView> with TickerProviderStateM
                                   index: widget.index,
                                   currentIndex: 2,
                                   tabIconData: widget.tabIconsList?[2],
+                                  removeAllSelect: () {
+                                    setRemoveAllSelection(
+                                        widget.tabIconsList?[2]);
+                                    widget.changeIndex!(2);
+                                  },
                                 ),
                               ),
                               Expanded(
@@ -93,6 +110,11 @@ class _BottomBarViewState extends State<BottomBarView> with TickerProviderStateM
                                   index: widget.index,
                                   currentIndex: 3,
                                   tabIconData: widget.tabIconsList?[3],
+                                  removeAllSelect: () {
+                                    setRemoveAllSelection(
+                                        widget.tabIconsList?[3]);
+                                    widget.changeIndex!(3);
+                                  },
                                 ),
                               )
                             ],
@@ -112,23 +134,57 @@ class _BottomBarViewState extends State<BottomBarView> with TickerProviderStateM
       ]
     );
   }
+
+  void setRemoveAllSelection(TabIconData? tabIconData) {
+    if (!mounted) return;
+    setState(() {
+      widget.tabIconsList?.forEach((TabIconData tab) {
+        tab.isSelected = false;
+        if (tabIconData!.index == tab.index) {
+          tab.isSelected = true;
+        }
+      });
+    });
+  }
 }
 
 class TabIcons extends StatefulWidget {
   final TabIconData? tabIconData;
   final int index;
   final int currentIndex;
-  const TabIcons({super.key,
+  final Function()? removeAllSelect;
+  const TabIcons({
+    super.key,
     this.tabIconData, 
     required this.index,
-   required this.currentIndex
+    required this.currentIndex,
+    this.removeAllSelect
   });
 
   @override
   State<TabIcons> createState() => _TabIconsState();
 }
 
-class _TabIconsState extends State<TabIcons> {
+class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
+  @override
+  void initState() {
+    widget.tabIconData?.animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    )..addStatusListener((AnimationStatus status) {
+        if (status == AnimationStatus.completed) {
+          if (!mounted) return;
+          widget.removeAllSelect!();
+          widget.tabIconData?.animationController?.reverse();
+        }
+      });
+    super.initState();
+  }
+
+  void setAnimation() {
+    widget.tabIconData?.animationController?.forward();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
@@ -140,20 +196,22 @@ class _TabIconsState extends State<TabIcons> {
           highlightColor: Colors.transparent,
           hoverColor: Colors.transparent,
           onTap: () {
-            // if (!widget.tabIconData!.isSelected) {
-            //   setAnimation();
-            // }
+            if (!widget.tabIconData!.isSelected) {
+              setAnimation();
+            }
           },
           child: IgnorePointer(
             child: Column(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(3),
+                  padding: const EdgeInsets.all(7),
                   decoration: BoxDecoration(
                     color: widget.index == widget.currentIndex? AppTheme.primary : null,
                     borderRadius: BorderRadius.circular(15)
                   ),
-                  child: Icon(widget.tabIconData?.icon, color: widget.index == widget.currentIndex? Colors.white : null),
+                  child: Icon(
+                    size: 20,
+                    widget.tabIconData?.icon, color: widget.index == widget.currentIndex? Colors.white : null),
                 ),
                 Text(widget.tabIconData!.text, style: TextStyle(color: widget.index == widget.currentIndex? AppTheme.primary: null))
               ],
