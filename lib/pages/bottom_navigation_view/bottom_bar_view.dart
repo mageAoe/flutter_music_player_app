@@ -64,7 +64,6 @@ class _BottomBarViewState extends State<BottomBarView> with TickerProviderStateM
                                   index: widget.index,
                                   currentIndex: 0,
                                   tabIconData: widget.tabIconsList?[0],
-                                  // onTap: widget.changeIndex!(0),
                                   removeAllSelect: () {
                                     setRemoveAllSelection(
                                         widget.tabIconsList?[0]);
@@ -77,7 +76,6 @@ class _BottomBarViewState extends State<BottomBarView> with TickerProviderStateM
                                   index: widget.index,
                                   currentIndex: 1,
                                   tabIconData: widget.tabIconsList?[1],
-                                  // onTap: widget.changeIndex!(1),
                                   removeAllSelect: () {
                                     setRemoveAllSelection(
                                         widget.tabIconsList?[1]);
