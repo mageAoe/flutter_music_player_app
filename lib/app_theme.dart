@@ -22,4 +22,7 @@ class AppTheme {
   static const Color spacer = Color(0xFFF2F2F2);
   static const String fontName = 'WorkSans';
 
+  // 备用色调
+  static const Color primaryColor1 = Color.fromARGB(237, 252, 243, 236);
+
 }
