@@ -22,6 +22,10 @@ class AppTheme {
   static const Color spacer = Color(0xFFF2F2F2);
   static const String fontName = 'WorkSans';
 
+  // swiper
+  static const Color swiperColor = Color.fromARGB(255, 255, 255, 255);
+  static const Color swiperActiveColor = Color.fromRGBO(230, 0,38, 1);
+
   // 备用色调
   static const Color primaryColor1 = Color.fromARGB(237, 252, 243, 236);
 
