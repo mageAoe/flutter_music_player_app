@@ -10,6 +10,9 @@
 - 横竖屏切换：orientation
 - 屏幕适配方案： flutter_screenutil（适配文字大小、padding、margin）
 - 刷新动画：liquid_pull_refresh
+- 持久化存储: shared_preferences
+- md5加密：crypto
+- 文件读取：path_provider + dart:io
 
 
 ### 目录结构: 
@@ -24,3 +27,14 @@
 - https://github.com/YYFlutter/flutter-animation-set
 
 Flutter Theme : https://itome.team/blog/2019/12/flutter-advent-calendar-day12/
+
+### 渐变色
+
+#eeaeca -  #94bbe9 - #b0e0d7
+
+- https://www.jianshu.com/p/d78d7e5db07f
+- https://juejin.cn/post/6847902216871739400
+
+### tabbar 透明
+
+https://github.com/webabcd/flutter_demo
