@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_music_player_app/app_theme.dart';
+import 'package:flutter_music_player_app/utlis/network_util.dart';
 import 'pages/bottom_navigation_view/bottom_bar_view.dart';
 import 'package:flutter_music_player_app/pages/bottom_navigation_view/tabIcon_data.dart';
 
@@ -22,6 +23,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   Widget tabBody = Container(color: AppTheme.background);
   int pageIndex = 0;
 
+  final NetworkUtil networkUtil = NetworkUtil();
+
+  final PageController pageController = PageController(initialPage: 0);
+
   final List<Widget> _pages = [
     const FindView(),
     const SongSheetView(),
@@ -35,20 +40,17 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       tab.isSelected = false;
     }
     tabIconsList[0].isSelected = true;
-
     animationController = AnimationController(duration: const Duration(milliseconds: 600), vsync: this);
+    // 监听网络变化
+    networkUtil.initNetworkListener();
+    tabBody = const FindView();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // appBar: AppBar(
-        //   // Theme.of(context).colorScheme.inversePrimary,
-        //   backgroundColor: AppTheme.primary,
-        //   title: Text(widget.title, style: const TextStyle(color:AppTheme.white)),
-        // ),
-        body: Container(
+      body: Container(
         color: AppTheme.background,
         child: Scaffold(
           backgroundColor: Colors.transparent,
@@ -61,6 +63,17 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 return Stack(
                   children: <Widget>[
                     _pages[pageIndex],
+                    // PageView(
+                    //   allowImplicitScrolling: true,
+                    //   controller: pageController,
+                    //   children: _pages,
+                    //   onPageChanged: (index){
+                    //     setState(() {
+                    //       pageIndex = index;
+                    //     });
+                    //   },
+                    // ),
+                    // tabBody,
                     bottomBar(),
                   ],
                 );
@@ -90,19 +103,53 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           index: pageIndex,
           addClick: () {},
           changeIndex: (int index) {
+            print(index);
             setState(() {
               pageIndex = index;
+              // pageController.jumpToPage(index);
             });
-            // if (index == 0 || index == 2) {
-            //   animationController?.reverse().then<dynamic>((data) {
-            //     if (!mounted) {
-            //       return;
-            //     }
-            //     // setState(() {
-            //     //   tabBody =
-            //     //       MyDiaryScreen(animationController: animationController);
-            //     // });
-            //   });
+
+
+
+
+
+            if(index == 0){
+              animationController?.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  tabBody = const FindView();
+                });
+              });
+            }else if (index == 1) {
+              animationController?.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  tabBody = const SongSheetView();
+                });
+              });
+            }else if(index == 2){
+              animationController?.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  tabBody = const MvView();
+                });
+              });
+            }else{
+              animationController?.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  tabBody = const MyView();
+                });
+              });
+            }
             // } else if (index == 1 || index == 3) {
             //   animationController?.reverse().then<dynamic>((data) {
             //     if (!mounted) {

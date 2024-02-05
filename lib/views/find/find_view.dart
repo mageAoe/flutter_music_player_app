@@ -6,6 +6,9 @@ import 'package:flutter_music_player_app/widgets/find_widget.dart';
 import 'package:flutter_music_player_app/api/find_api.dart';
 import 'package:flutter_music_player_app/model/banners_model.dart';
 
+// import 'dart:io';
+// import 'package:flutter_music_player_app/utlis/file_util.dart';
+
 class FindView extends StatefulWidget {
   const FindView({ super.key });
 
@@ -19,13 +22,11 @@ class _FindViewState extends State<FindView> with SingleTickerProviderStateMixin
    @override
   void initState() {
     FindApi.getBanner().then((bannerList) {
-      if(bannerList != null){
-        print('=============');
-        print(bannerList);
-        setState(() {
-          banner = bannerList;
-        });
-      }
+        if(bannerList != null){
+          setState(() {
+            banner = bannerList;
+          });
+        }
     });
     super.initState();
   }
@@ -37,14 +38,23 @@ class _FindViewState extends State<FindView> with SingleTickerProviderStateMixin
           leading: const Icon(Icons.menu, color: Colors.white),
           elevation: 0,
           backgroundColor: AppTheme.primary,
+          // backgroundColor: Colors.transparent,
           centerTitle: true,
-          title: const SearchWidget(),
-        ),
-        body: ListView(
+          title:const SearchWidget(),
+          // title: Container(
+          //   decoration: const BoxDecoration(
+          //     gradient: LinearGradient(
+          //       colors: [Color(0xFFeeaeca), Color(0xFF94bbe9)],
+          //     )
+          //   ),
+          //   child: const SearchWidget(),
+          // ),
+      ),
+      body: ListView(
           children: [
             SwiperWidget(banner: banner)
           ],
-        )
+      )
     );
   }
 }

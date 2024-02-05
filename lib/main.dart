@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_music_player_app/navigation_home_screen.dart';
 import 'package:flutter_music_player_app/pages/introduction_view/introduction_view.dart';
@@ -6,6 +7,8 @@ import 'package:flutter_music_player_app/pages/introduction_view/introduction_vi
 import 'package:flutter_music_player_app/test/slideTransition_demo.dart';
 
 void main() {
+  // 设置为透明
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   runApp(const MyApp());
 }
 
