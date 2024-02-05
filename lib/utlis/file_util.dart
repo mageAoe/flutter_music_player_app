@@ -12,20 +12,22 @@ class FileUtil{
   static Future<String> getSubDirPath(String subDirPath) async {
     // get the path to the document directory.
     final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
-    return '$appDocumentsDir/$subDirPath';
+    // print('appDocumentsDir: ${appDocumentsDir.path}'); //  /data/user/0/com.example.flutter_music_player_app/app_flutter
+    return '${appDocumentsDir.path}/$subDirPath';
   }
 
 
   /// 相对app目录之下创建子目录
   static Future<Directory> createLocalDir(String subDirPath) async {
     String dirPath = await getSubDirPath(subDirPath);
+    // print('dirPath: $dirPath'); // '/data/user/0/com.example.flutter_music_player_app/app_flutter'/cache
     Directory dir = Directory(dirPath);
-    if (await dir.exists()) {  // 如果目录不存在，就创建
+    if (await dir.exists()) {
       return dir;
     } else {
+      // 如果目录不存在，就创建
       return dir.create(recursive: true);
     }
-    
   }
 
   /// 判断文件是否存在

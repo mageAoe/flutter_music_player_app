@@ -7,14 +7,9 @@ class FindApi {
 
 
   static Future<List<Banners>?> getBanner() async {
-    var res = await _httpClient.get();
-    print('----------print(res);------------');
-    print(res);
-    print(res.data);
-    if(res.data != null){
-      print('----------进来了------------');
-      List<Banners> bannerList = BannersModel.fromJson(res.data).banners;
-      print(bannerList);
+    var res = await _httpClient.getJsonData(HttpClient.URL_BANNER_LIST,useCache: true, checkCacheTimeout: true);
+    if(res != null){
+      List<Banners> bannerList = BannersModel.fromJson(res).banners;
       return bannerList;
     }else{
       return null;
