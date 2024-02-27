@@ -6,6 +6,69 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1320055",
+      "name": "功能管理",
+      "font_class": "gongnengguanli",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "7853725",
+      "name": "云盘",
+      "font_class": "yunpan",
+      "unicode": "e957",
+      "unicode_decimal": 59735
+    },
+    {
+      "icon_id": "20784206",
+      "name": "下载本地",
+      "font_class": "xiazaibendi",
+      "unicode": "e6bc",
+      "unicode_decimal": 59068
+    },
+    {
+      "icon_id": "11020398",
+      "name": "歌手",
+      "font_class": "geshou",
+      "unicode": "e66f",
+      "unicode_decimal": 58991
+    },
+    {
+      "icon_id": "11520431",
+      "name": "排行榜",
+      "font_class": "paihangbang",
+      "unicode": "e760",
+      "unicode_decimal": 59232
+    },
+    {
+      "icon_id": "20557842",
+      "name": "漫游",
+      "font_class": "manyou",
+      "unicode": "e887",
+      "unicode_decimal": 59527
+    },
+    {
+      "icon_id": "21936677",
+      "name": "发现",
+      "font_class": "faxian1",
+      "unicode": "e617",
+      "unicode_decimal": 58903
+    },
+    {
+      "icon_id": "29714451",
+      "name": "wangyiyun",
+      "font_class": "wangyiyun",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "34705087",
+      "name": "每日推荐",
+      "font_class": "a-ziyuan16",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
       "icon_id": "502405",
       "name": "播客",
       "font_class": "boke",
