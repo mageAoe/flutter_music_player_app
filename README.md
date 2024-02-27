@@ -13,6 +13,7 @@
 - 持久化存储: shared_preferences
 - md5加密：crypto
 - 文件读取：path_provider + dart:io
+- 轮播图： flutter_swiper_view
 
 
 ### 目录结构: 
@@ -25,6 +26,7 @@
 
 - https://github.com/YYFlutter/flutter-article
 - https://github.com/YYFlutter/flutter-animation-set
+- https://blog.csdn.net/yuzhiqiang_1993/article/details/88204031
 
 Flutter Theme : https://itome.team/blog/2019/12/flutter-advent-calendar-day12/
 
