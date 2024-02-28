@@ -9,7 +9,8 @@ import 'package:flutter_music_player_app/utlis/network_util.dart';
 
 class APICache {
   static const String dirName = 'cache';
-  static const Duration CACHE_TIMEOUT_API = Duration(hours: 6); // api缓存超时时长。
+  // static const Duration CACHE_TIMEOUT_API = Duration(hours: 6); // api缓存超时时长。
+  static const Duration CACHE_TIMEOUT_API = Duration(days: 2); // api 缓存2天
   static const Duration CACHE_TIMEOUT_FILE = Duration(days: 7); // 文件缓存超时时长。
 
   static Future<File> getLocalFile(String url) async {
