@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_music_player_app/app_theme.dart';
+import 'package:flutter_music_player_app/theme/app_theme.dart';
 import 'package:flutter_music_player_app/utlis/network_util.dart';
 import 'pages/bottom_navigation_view/bottom_bar_view.dart';
 import 'package:flutter_music_player_app/pages/bottom_navigation_view/tabIcon_data.dart';
@@ -26,13 +26,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   final NetworkUtil networkUtil = NetworkUtil();
 
   final PageController pageController = PageController(initialPage: 0);
-
-  final List<Widget> _pages = [
-    const FindView(),
-    const SongSheetView(),
-    const MvView(),
-    const MyView()
-  ];
 
    @override
   void initState() {
@@ -62,18 +55,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               } else {
                 return Stack(
                   children: <Widget>[
-                    _pages[pageIndex],
-                    // PageView(
-                    //   allowImplicitScrolling: true,
-                    //   controller: pageController,
-                    //   children: _pages,
-                    //   onPageChanged: (index){
-                    //     setState(() {
-                    //       pageIndex = index;
-                    //     });
-                    //   },
-                    // ),
-                    // tabBody,
+                    tabBody,
                     bottomBar(),
                   ],
                 );
@@ -103,22 +85,13 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           index: pageIndex,
           addClick: () {},
           changeIndex: (int index) {
-            print(index);
-            setState(() {
-              pageIndex = index;
-              // pageController.jumpToPage(index);
-            });
-
-
-
-
-
             if(index == 0){
               animationController?.reverse().then<dynamic>((data) {
                 if (!mounted) {
                   return;
                 }
                 setState(() {
+                  pageIndex = index;
                   tabBody = const FindView();
                 });
               });
@@ -128,6 +101,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   return;
                 }
                 setState(() {
+                  pageIndex = index;
                   tabBody = const SongSheetView();
                 });
               });
@@ -137,6 +111,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   return;
                 }
                 setState(() {
+                  pageIndex = index;
                   tabBody = const MvView();
                 });
               });
@@ -146,21 +121,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   return;
                 }
                 setState(() {
+                  pageIndex = index;
                   tabBody = const MyView();
                 });
               });
             }
-            // } else if (index == 1 || index == 3) {
-            //   animationController?.reverse().then<dynamic>((data) {
-            //     if (!mounted) {
-            //       return;
-            //     }
-            //     // setState(() {
-            //     //   tabBody =
-            //     //       TrainingScreen(animationController: animationController);
-            //     // });
-            //   });
-            // }
           },
         ),
       ],
