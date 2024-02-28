@@ -112,4 +112,60 @@ class YunMusicFont {
     fontFamily: 'yunMusic',
     matchTextDirection : true
   );
+
+   // 发现1
+  static const IconData faxian1 = IconData(
+    0xe617,
+    fontFamily: 'yunMusic',
+    matchTextDirection : true
+  );
+
+  // 网易云 - 激活
+  static const IconData wangyiyunActive = IconData(
+    0xe604,
+    fontFamily: 'yunMusic',
+    matchTextDirection : true
+  );
+
+  // 每日推荐
+  static const IconData ziyuan16 = IconData(
+    0xe60a,
+    fontFamily: 'yunMusic',
+    matchTextDirection : true
+  );
+
+    // 歌手
+  static const IconData geshou = IconData(
+    0xe66f,
+    fontFamily: 'yunMusic',
+    matchTextDirection : true
+  );
+
+    // 排行榜
+  static const IconData panhangbang = IconData(
+    0xe760,
+    fontFamily: 'yunMusic',
+    matchTextDirection : true
+  );
+
+  // 功能管理
+  static const IconData gongnengguanli = IconData(
+    0xe620,
+    fontFamily: 'yunMusic',
+    matchTextDirection : true
+  );
+
+  // 云盘
+  static const IconData yunpan = IconData(
+    0xe957,
+    fontFamily: 'yunMusic',
+    matchTextDirection : true
+  );
+
+  // 下载
+  static const IconData xiazaibendi = IconData(
+    0xe6bc,
+    fontFamily: 'yunMusic',
+    matchTextDirection : true
+  );
 }
