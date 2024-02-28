@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_music_player_app/app_theme.dart';
+import 'package:flutter_music_player_app/theme/app_theme.dart';
 
 class MvView extends StatefulWidget {
   const MvView({ Key? key }) : super(key: key);
