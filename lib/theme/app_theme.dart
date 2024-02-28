@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class AppTheme {
 
-  static const Color primary = Color.fromRGBO(230, 0,38, 1);
+  static const Color primary = Color(0xFFf02b25);
+  static const Color allWhite = Color(0xFFFFFFFF); // 纯白
 
   static const Color notWhite = Color(0xFFEDF0F2);
   static const Color nearlyWhite = Color(0xFFFEFEFE);
@@ -26,7 +27,17 @@ class AppTheme {
   static const Color swiperColor = Color.fromARGB(255, 255, 255, 255);
   static const Color swiperActiveColor = Color.fromRGBO(230, 0,38, 1);
 
+  // my color
+  static const Color myLogoBg = Color(0xFF4e1413);
+  static const Color myLogoBgBtn = Color(0xFF663635);
+  static const Color myLogoBtnIcon = Color(0xFFdfd8d3);
+  static const Color myLoveSing = Color(0xFFe9ecf1);
+
   // 备用色调
   static const Color primaryColor1 = Color.fromARGB(237, 252, 243, 236);
 
 }
+
+ThemeData appMusicTheme = ThemeData(
+  colorScheme: ColorScheme.fromSeed(seedColor: AppTheme.myLogoBgBtn),
+);
