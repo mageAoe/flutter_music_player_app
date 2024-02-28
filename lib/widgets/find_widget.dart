@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter_music_player_app/model/banners_model.dart';
-import 'package:flutter_music_player_app/app_theme.dart';
+import 'package:flutter_music_player_app/theme/app_theme.dart';
+import 'package:flutter_swiper_view/flutter_swiper_view.dart';
+
 
 /*
 * SearchWidget
@@ -69,21 +70,65 @@ class SwiperWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context){
-    return SizedBox(
-      width: 1080.w,
-      height: 420.h,
-      child: Swiper(
-        itemBuilder: (BuildContext context,int index){
-            return Image.network("${banner[index].pic}",fit: BoxFit.fill,);
-          },
-        itemCount: banner.length,
-        pagination: const SwiperPagination(
-          builder: DotSwiperPaginationBuilder(
-            color: AppTheme.swiperColor,
-            activeColor: AppTheme.swiperActiveColor
-          )
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        width: 1080.w,
+        height: 480.h,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8)
         ),
-        // control: const SwiperControl(),
+        child: Swiper(
+          itemBuilder: (BuildContext context,int index){
+              return Image.network("${banner[index].pic}",fit: BoxFit.fill);
+            },
+          itemCount: banner.length,
+          pagination: const SwiperPagination(
+            builder: DotSwiperPaginationBuilder(
+              color: AppTheme.swiperColor,
+              activeColor: AppTheme.swiperActiveColor
+            )
+          ),
+          // control: const SwiperControl(),
+        ),
+      ),
+    );
+  }
+}
+
+/*
+*  category
+*/
+class CategoryWidget extends StatelessWidget {
+  const CategoryWidget({
+    super.key,
+    required this.menuList,
+  });
+
+  final List menuList;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverGrid(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 4,
+        childAspectRatio: 1,
+      ),
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) {
+          return Column(
+            children: [
+              Container(
+                alignment: Alignment.center,
+                width: 120.w,
+                height: 120.w,
+                child: menuList[index]['icon'],
+              ),
+              Text(menuList[index]['title'], style: const TextStyle(color: Colors.black87)),
+            ],
+          );
+        },
+        childCount: menuList.length,
       ),
     );
   }
