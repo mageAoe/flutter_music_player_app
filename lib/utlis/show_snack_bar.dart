@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_music_player_app/theme/app_theme.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ShowSnackBar {
   static showSnackBar({required BuildContext context, required String text}) {
     final snackBar = SnackBar(
-      backgroundColor: Colors.purple,
-      content: Text(text),
+      backgroundColor: const Color.fromRGBO(243,244,246,1),
+      content: Text(text, style:  TextStyle(color: Colors.black, fontSize: 40.sp, fontWeight: FontWeight.bold)),
       duration: const Duration(milliseconds: 2000),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      // margin: const EdgeInsets.only(left: 23, right: 23, bottom: 23),
-      margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 48.0),
+      // margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 48.0),
+      margin: const EdgeInsets.only(bottom: 0.0),
       behavior: SnackBarBehavior.floating,
-      // action: SnackBarAction(
-      //   label: "close",
-      //   onPressed: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
-      // ),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
