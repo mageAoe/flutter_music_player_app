@@ -22,7 +22,7 @@ class TabIconData {
   static List<TabIconData> tabIconsList = <TabIconData>[
     TabIconData(
       icon: YunMusicFont.yinle2,
-      selectedImagePath: YunMusicFont.faxianxuanze,
+      selectedImagePath: YunMusicFont.wangyiyunActive,
       index: 0,
       text: '发现',
       isSelected: true,
@@ -30,7 +30,7 @@ class TabIconData {
     ),
     TabIconData(
       icon: YunMusicFont.gedan,
-      selectedImagePath: YunMusicFont.faxianxuanze,
+      selectedImagePath: YunMusicFont.gedan,
       index: 1,
       text: '歌单',
       isSelected: false,
@@ -38,7 +38,7 @@ class TabIconData {
     ),
     TabIconData(
       icon: YunMusicFont.faxian,
-      selectedImagePath: YunMusicFont.faxianxuanze,
+      selectedImagePath: YunMusicFont.faxian1,
       index: 2,
       text: 'MV',
       isSelected: false,
@@ -46,7 +46,7 @@ class TabIconData {
     ),
     TabIconData(
       icon: YunMusicFont.yinle,
-      selectedImagePath: YunMusicFont.faxianxuanze,
+      selectedImagePath: YunMusicFont.yinle1,
       index: 3,
       text: '我的',
       isSelected: false,

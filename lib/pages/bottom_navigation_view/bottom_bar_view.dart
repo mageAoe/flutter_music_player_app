@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
-import 'package:flutter_music_player_app/app_theme.dart';
+import 'package:flutter_music_player_app/theme/app_theme.dart';
 import 'package:flutter_music_player_app/main.dart';
 import './tabIcon_data.dart';
 
@@ -201,15 +201,13 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
           child: IgnorePointer(
             child: Column(
               children: [
-                Container(
-                  padding: const EdgeInsets.all(7),
-                  decoration: BoxDecoration(
-                    color: widget.index == widget.currentIndex? AppTheme.primary : null,
-                    borderRadius: BorderRadius.circular(15)
-                  ),
-                  child: Icon(
-                    size: 20,
-                    widget.tabIconData?.icon, color: widget.index == widget.currentIndex? Colors.white : null),
+                widget.index == widget.currentIndex ? Icon(
+                    size: 28,
+                    color: AppTheme.primary,
+                    widget.tabIconData?.selectedImagePath,
+                ): Icon(
+                    size: 28,
+                    widget.tabIconData?.icon,
                 ),
                 Text(widget.tabIconData!.text, style: TextStyle(color: widget.index == widget.currentIndex? AppTheme.primary: null))
               ],

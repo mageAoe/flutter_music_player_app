@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_music_player_app/theme/app_theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_music_player_app/navigation_home_screen.dart';
 import 'package:flutter_music_player_app/pages/introduction_view/introduction_view.dart';
@@ -24,10 +25,7 @@ class MyApp extends StatelessWidget {
       builder: (context , child){
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-              useMaterial3: true,
-            ),
+            theme: appMusicTheme,
             routes: {
               '/MainPage': (ctx) => const NavigationHomeScreen(),
             },
