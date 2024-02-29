@@ -28,10 +28,13 @@ class AppTheme {
   static const Color swiperActiveColor = Color.fromRGBO(230, 0,38, 1);
 
   // my color
+  static const Color myBg = Color(0xFFf8f9fd);
   static const Color myLogoBg = Color(0xFF4e1413);
   static const Color myLogoBgBtn = Color(0xFF663635);
   static const Color myLogoBtnIcon = Color(0xFFdfd8d3);
   static const Color myLoveSing = Color(0xFFe9ecf1);
+  static const Color myLoveSingText = Color(0xFF3c3c3c);
+  static const Color myLoveSingSubtext = Color(0xFF81858e); // 95969c a5a6ac 81858e
 
   // 备用色调
   static const Color primaryColor1 = Color.fromARGB(237, 252, 243, 236);
