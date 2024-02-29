@@ -1,7 +1,6 @@
 import 'package:flutter_music_player_app/services/httpClient.dart';
 import 'package:flutter_music_player_app/model/login_model.dart';
 import 'package:flutter_music_player_app/services/api.dart';
-import 'package:flutter_music_player_app/model/user_detail_model.dart';
 
 class LoginApi {
   static final HttpClient _httpClient = HttpClient();
@@ -28,25 +27,6 @@ class LoginApi {
     if(res != null){
       UserInfo userInfo = UserInfo.fromJson(res);
       return userInfo;
-    }else{
-      return null;
-    }
-  }
-
-  // 获取用户详情
-  static Future<UserDetailModel?> getUserDetail(String query) async {
-    var res = await _httpClient.getJsonData(
-      Api.URL_USER_DETAIL, 
-      useCache: true, 
-      checkCacheTimeout: true,
-      query: query
-    );
-    print(Api.URL_USER_DETAIL);
-    print(query);
-    print(res);
-    if(res != null){
-      UserDetailModel userDetail = UserDetailModel.fromJson(res);
-      return userDetail;
     }else{
       return null;
     }
