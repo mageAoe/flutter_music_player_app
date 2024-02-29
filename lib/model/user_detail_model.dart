@@ -50,6 +50,10 @@ class UserDetailModel {
     profileVillageInfo = ProfileVillageInfo.fromJson(json['profileVillageInfo']);
   }
 
+  bool isEmpty() {
+    return profile == null && level == null;
+  }
+
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['level'] = level;
