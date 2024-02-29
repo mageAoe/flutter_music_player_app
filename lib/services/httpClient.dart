@@ -35,6 +35,7 @@ class HttpClient {
         }
       }
     }
+    // APICache.deleteCache('user/playlist'); // 缓存错误的数据删除
     // 缓存没取到，就请求网络。
     if (data == null) {
       /// 这儿文本要缓存处理，所以ResponseType不用默认的json格式

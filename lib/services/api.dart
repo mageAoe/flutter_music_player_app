@@ -9,4 +9,6 @@ class Api {
   static String URL_LOGIN_CELLPHONE = 'login/cellphone'; // phone=xxx&captcha=123
   // 获取用户详情
   static String URL_USER_DETAIL = 'user/detail'; // uid=32953014
+  // 获取用户歌单
+  static String URL_USER_PLAYLIST = 'user/playlist'; // uid=585138859
 }
