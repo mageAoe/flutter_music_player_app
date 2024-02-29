@@ -7,19 +7,30 @@ import 'package:flutter_music_player_app/theme/app_theme.dart';
  * 我的头像
  */
 class MyAvatarWidget extends StatelessWidget {
+  final String? avatar;
+
   const MyAvatarWidget({
     super.key,
+    this.avatar
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-         width: 180.w,
-         height: 180.w,
-         decoration: BoxDecoration(
-           color: Colors.white,
-           borderRadius: BorderRadius.circular(90.w),
-         ),
+        width: 180.w,
+        height: 180.w,
+        decoration: avatar == null ?
+        BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(90.w),
+        ):
+        BoxDecoration(
+          borderRadius: BorderRadius.circular(90.w),
+          image: DecorationImage(
+             image: NetworkImage(avatar!),
+             fit: BoxFit.cover
+          )
+        ),
      );
   }
 }
