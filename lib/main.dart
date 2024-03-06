@@ -3,6 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_music_player_app/theme/app_theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_music_player_app/navigation_home_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_music_player_app/services/provider.dart';
+
 import 'package:flutter_music_player_app/pages/introduction_view/introduction_view.dart';
 
 import 'package:flutter_music_player_app/test/slideTransition_demo.dart';
@@ -23,7 +26,9 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context , child){
-          return MaterialApp(
+        return ChangeNotifierProvider<Shop>(
+          create: (context) => Shop(),
+          child: MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: appMusicTheme,
             routes: {
@@ -32,7 +37,8 @@ class MyApp extends StatelessWidget {
             home: const NavigationHomeScreen(),
             // home: const IntroductionAnimationScreen(),
             // home: const MyHomePage(),
-          );
+          ),
+        );
       }
     );
   }
