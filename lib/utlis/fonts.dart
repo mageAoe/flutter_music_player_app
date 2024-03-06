@@ -168,4 +168,18 @@ class YunMusicFont {
     fontFamily: 'yunMusic',
     matchTextDirection : true
   );
+
+  // 爱心
+  static const IconData love = IconData(
+    0xe642,
+    fontFamily: 'yunMusic',
+    matchTextDirection : true
+  );
+
+  // 消息
+  static const IconData message = IconData(
+    0xe605,
+    fontFamily: 'yunMusic',
+    matchTextDirection : true
+  );
 }

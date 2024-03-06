@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "7932259",
+      "name": "message",
+      "font_class": "message",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "11349144",
+      "name": "love",
+      "font_class": "love",
+      "unicode": "e642",
+      "unicode_decimal": 58946
+    },
+    {
+      "icon_id": "700860",
+      "name": "已购项目",
+      "font_class": "yigouxiangmu",
+      "unicode": "e65c",
+      "unicode_decimal": 58972
+    },
+    {
       "icon_id": "1320055",
       "name": "功能管理",
       "font_class": "gongnengguanli",
