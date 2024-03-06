@@ -11,4 +11,6 @@ class Api {
   static String URL_USER_DETAIL = 'user/detail'; // uid=32953014
   // 获取用户歌单
   static String URL_USER_PLAYLIST = 'user/playlist'; // uid=585138859
+  // 获取歌单所有歌曲
+  static String URL_PLAYLIST_TRACK_ALL = 'playlist/track/all'; // id=24381616&limit=10&offset=0
 }
