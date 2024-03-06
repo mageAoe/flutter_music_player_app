@@ -21,12 +21,13 @@ class APICache {
     return File('$dir/$fileName');
   }
 
-  static Future<String> getCache(String url, {checkCacheTimeout = true}) async {
+  // isLoginCache 不主动清楚掉登录的信息
+  static Future<String> getCache(String url, {checkCacheTimeout = true, isLoginCache = true}) async {
     String cache = '';
     File file = await getLocalFile(url);
     if (await file.exists()) {
       // 判断网络和缓存时间
-      if (checkCacheTimeout && NetworkUtil().isNetworkAvailable() && FileUtil.isFileTimeout(file, CACHE_TIMEOUT_API)) {
+      if (checkCacheTimeout && NetworkUtil().isNetworkAvailable() && FileUtil.isFileTimeout(file, CACHE_TIMEOUT_API) && isLoginCache) {
         // 缓存超时了，并且网络可用，丢掉之前的。
         file.delete(); // 网络请求成功才删除。
         print('缓存超时：$url');

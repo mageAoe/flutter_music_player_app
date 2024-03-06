@@ -22,7 +22,8 @@ class LoginApi {
       Api.URL_LOGIN_CELLPHONE, 
       useCache: true, 
       checkCacheTimeout: true,
-      query: query
+      query: query,
+      isLoginCache: false
     );
     if(res != null){
       UserInfo userInfo = UserInfo.fromJson(res);
