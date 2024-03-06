@@ -3,11 +3,11 @@ import 'package:flutter_music_player_app/theme/app_theme.dart';
 import 'package:flutter_music_player_app/utlis/network_util.dart';
 import 'pages/bottom_navigation_view/bottom_bar_view.dart';
 import 'package:flutter_music_player_app/pages/bottom_navigation_view/tabIcon_data.dart';
-
 import 'package:flutter_music_player_app/views/find/find_view.dart';
 import 'package:flutter_music_player_app/views/song_sheet/song_sheet_view.dart';
 import 'package:flutter_music_player_app/views/mv/mv_view.dart';
 import 'package:flutter_music_player_app/views/my/my_view.dart';
+import 'package:flutter_music_player_app/services/KeepAliveWrapper.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -15,17 +15,15 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
+class _MyHomePageState extends State<MyHomePage> {
 
-  AnimationController? animationController;
-  List<TabIconData> tabIconsList = TabIconData.tabIconsList;
-
-  Widget tabBody = Container(color: AppTheme.background);
   int pageIndex = 0;
+  List<Widget> pages = [];
+  List<TabIconData> tabIconsList = TabIconData.tabIconsList;
 
   final NetworkUtil networkUtil = NetworkUtil();
 
-  final PageController pageController = PageController(initialPage: 0);
+  final PageController _controller = PageController(initialPage: 0);
 
    @override
   void initState() {
@@ -33,10 +31,12 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       tab.isSelected = false;
     }
     tabIconsList[0].isSelected = true;
-    animationController = AnimationController(duration: const Duration(milliseconds: 600), vsync: this);
     // 监听网络变化
     networkUtil.initNetworkListener();
-    tabBody = const FindView();
+    pages..add(const KeepAliveWrapper(keepAlive: true, child: FindView()))
+          ..add(const KeepAliveWrapper(keepAlive: true, child: SongSheetView()))
+          ..add(const KeepAliveWrapper(keepAlive: true, child: MvView()))
+          ..add(const KeepAliveWrapper(keepAlive: true, child: MyView()));
     super.initState();
   }
 
@@ -55,7 +55,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               } else {
                 return Stack(
                   children: <Widget>[
-                    tabBody,
+                    PageView(
+                      controller: _controller,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: pages,
+                    ),
                     bottomBar(),
                   ],
                 );
@@ -85,47 +89,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           index: pageIndex,
           addClick: () {},
           changeIndex: (int index) {
-            if(index == 0){
-              animationController?.reverse().then<dynamic>((data) {
-                if (!mounted) {
-                  return;
-                }
-                setState(() {
-                  pageIndex = index;
-                  tabBody = const FindView();
-                });
-              });
-            }else if (index == 1) {
-              animationController?.reverse().then<dynamic>((data) {
-                if (!mounted) {
-                  return;
-                }
-                setState(() {
-                  pageIndex = index;
-                  tabBody = const SongSheetView();
-                });
-              });
-            }else if(index == 2){
-              animationController?.reverse().then<dynamic>((data) {
-                if (!mounted) {
-                  return;
-                }
-                setState(() {
-                  pageIndex = index;
-                  tabBody = const MvView();
-                });
-              });
-            }else{
-              animationController?.reverse().then<dynamic>((data) {
-                if (!mounted) {
-                  return;
-                }
-                setState(() {
-                  pageIndex = index;
-                  tabBody = const MyView();
-                });
-              });
-            }
+            _controller.jumpToPage(index);
+            setState(() {
+              pageIndex = index;
+            });
           },
         ),
       ],
