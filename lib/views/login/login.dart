@@ -40,8 +40,8 @@ class _LoginViewState extends State<LoginView> {
     //   return;
     // }
     print('================');
-    // LoginApi.getUserInfo('phone=${phoneController.text}&captcha=${codeController.text}');
-    LoginApi.getUserInfo('phone=17608454514&captcha=4186');
+    LoginApi.getUserInfo('phone=${phoneController.text}&captcha=${codeController.text}');
+    // LoginApi.getUserInfo('phone=17608454514&captcha=4186');
   }
 
   @override
