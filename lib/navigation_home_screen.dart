@@ -31,7 +31,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
       color: AppTheme.white,
       child: SafeArea(
         top: false,
-        bottom: false,
+        bottom: true,
         child: Scaffold(
           backgroundColor: AppTheme.nearlyWhite,
           body: DrawerUserController(
