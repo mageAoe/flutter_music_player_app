@@ -1,3 +1,5 @@
+// 歌单 - 详情
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_music_player_app/theme/app_theme.dart';
@@ -5,14 +7,22 @@ import 'package:flutter_music_player_app/theme/public_style.dart';
 import 'package:flutter_music_player_app/utlis/fonts.dart';
 import 'package:flutter_music_player_app/api/my_api.dart';
 import 'package:flutter_music_player_app/model/playlist_track_all_model.dart';
+import 'package:flutter_music_player_app/views/song_sheet/cover_view.dart';
 
 
 class SongDetailView extends StatefulWidget {
   final int id;
   final String coverImgUrl;
   final String name;
-  final String? nickname;
-  final String? avatar;
+  final String nickname;
+  final String avatar;
+  final int subscribedCount; // 收藏
+  final int commentCount; // 评论
+  final int shareCount; //分享
+  final String type;
+  final String description; // 描述
+  final int playCount;
+  final String coverName;
 
   const SongDetailView({
     super.key, 
@@ -20,7 +30,14 @@ class SongDetailView extends StatefulWidget {
     required this.coverImgUrl,
     required this.name,
     required this.nickname,
-    required this.avatar
+    required this.avatar,
+    required this.subscribedCount,
+    required this.commentCount,
+    required this.shareCount,
+    required this.type,
+    required this.description,
+    required this.playCount,
+    required this.coverName,
   });
 
   @override
@@ -34,12 +51,6 @@ class _SongDetailViewState extends State<SongDetailView> {
   int limit = 20;
   double safeAreaTop = 0.0;
   ScrollController scrollController = ScrollController();
-
-  List btnList = [
-    {'name': '分享', 'icon': Icons.share },
-    {'name': '评论', 'icon': YunMusicFont.message },
-    {'name': '收藏', 'icon': Icons.collections_bookmark_outlined },
-  ];
 
   // 获取歌单里面的歌曲
   checkLoginStatus() async {
@@ -99,7 +110,7 @@ class _SongDetailViewState extends State<SongDetailView> {
           children: [
             Container(
               width: double.infinity,
-              height: 890.h,
+              height: 980.h,
               padding: EdgeInsets.fromLTRB(40.w, safeAreaTop + 120.h , 40.w, 40.w),
               decoration: const BoxDecoration(
                 gradient: songDetailHeadLinearGradientStyle
@@ -111,11 +122,11 @@ class _SongDetailViewState extends State<SongDetailView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        width: 330.w,
-                        height: 330.w,
+                        width: 280.w,
+                        height: 280.w,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(15),
-                          child: Image.network(widget.coverImgUrl, fit: BoxFit.cover)
+                          child: widget.coverImgUrl == '' ? const Text('') : Image.network(widget.coverImgUrl, fit: BoxFit.cover)
                         ),
                       ),
                       SizedBox(width: 30.h),
@@ -125,29 +136,74 @@ class _SongDetailViewState extends State<SongDetailView> {
                           SizedBox(
                             width: MediaQuery.of(context).size.width - 480.w, // 80 + 30 + 330 = 480
                             child: Text(
-                              widget.name, 
+                              widget.name,
                               softWrap: true,
                               style: TextStyle(fontSize: 45.sp, fontWeight: FontWeight.bold, color: AppTheme.allWhite)
+                            ),
                           ),
-                          ),
-                          
                           SizedBox(height: 30.h),
                           Row(
                             children: [
                               SizedBox(
-                                width: 80.w,
-                                height: 80.w,
+                                width: 70.w,
+                                height: 70.w,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(40),
-                                  child: Image.network("${widget.avatar}", fit: BoxFit.cover)
+                                  child: Image.network(widget.avatar, fit: BoxFit.cover)
                                 ),
                               ),
-                              SizedBox(width: 30.h),
+                              SizedBox(width: 20.w),
                               Row(
                                 children: [
-                                  Text(widget.nickname!, style: TextStyle(fontSize: 35.sp, color: AppTheme.songDeatilSamllSize)),
-                                  Icon(Icons.arrow_forward_ios_outlined, size: 35.sp, color: AppTheme.songDeatilSamllSize)
+                                  Text(widget.nickname, style: TextStyle(fontSize: 35.sp, color: AppTheme.songDetailSubText)),
+                                  SizedBox(width: 20.w),
+                                  Container(
+                                    padding: EdgeInsets.fromLTRB(16.w, 8.w, 16.w, 8.w),
+                                    decoration: BoxDecoration(
+                                      color: AppTheme.songDetailBtn,
+                                      borderRadius: BorderRadius.circular(8)
+                                    ),
+                                    child: Row(
+                                      children: [
+                                       Icon(Icons.add, color: AppTheme.allWhite, size: 28.sp),
+                                        SizedBox(width: 10.w),
+                                        Text('关注', style: TextStyle(color: AppTheme.allWhite, fontWeight: FontWeight.w700, fontSize: 22.sp))
+                                      ],
+                                    ),
+                                  )
                                 ],
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 30.h),
+                          Row(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.fromLTRB(16.w, 8.w, 16.w, 8.w),
+                                  decoration: BoxDecoration(
+                                    color: AppTheme.songDetailBtnCat,
+                                    borderRadius: BorderRadius.circular(4)
+                                ),
+                                child: Row(
+                                  children: [
+                                    Text('4.9分', style: TextStyle(fontSize: 28.sp, color: AppTheme.allWhite)),
+                                    Icon(Icons.arrow_forward_ios_outlined, size: 28.sp, color: AppTheme.allWhite)
+                                  ],
+                                )
+                              ),
+                              SizedBox(width: 20.w),
+                              Container(
+                                padding: EdgeInsets.fromLTRB(16.w, 8.w, 16.w, 8.w),
+                                  decoration: BoxDecoration(
+                                    color: AppTheme.songDetailBtnCat,
+                                    borderRadius: BorderRadius.circular(4)
+                                ),
+                                child: Row(
+                                  children: [
+                                    Text(widget.type, style: TextStyle(fontSize: 28.sp, color: AppTheme.allWhite)),
+                                    Icon(Icons.arrow_forward_ios_outlined, size: 28.sp, color: AppTheme.allWhite)
+                                  ],
+                                )
                               )
                             ],
                           )
@@ -155,28 +211,58 @@ class _SongDetailViewState extends State<SongDetailView> {
                       )
                     ],
                   ),
-                  SizedBox(height: 40.h),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 30.h),
+                    child: InkWell(
+                      onTap: (){
+                        Navigator.push( 
+                          context,
+                          MaterialPageRoute(builder: (context) {
+                            return const CoverView();
+                          }),
+                        );
+                      },
+                      child:  Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Text(widget.description, style: const TextStyle(color: AppTheme.allWhite), overflow: TextOverflow.ellipsis)
+                          ),
+                          SizedBox(width: 40.w),
+                          Expanded(
+                            flex: 1,
+                            child: Row(
+                              children: [
+                                const Text('封面:周杰伦', style: TextStyle(color: AppTheme.allWhite)),
+                                SizedBox(width: 10.w),
+                                Icon(Icons.arrow_forward_ios_outlined,size: 34.sp, color: AppTheme.allWhite)
+                              ],
+                            )
+                          )
+                          // 封面:周杰伦>
+                        ],
+                      )
+                      ),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: btnList.map((e){
-                      return ClipRRect(
-                        borderRadius: BorderRadius.circular(45),
-                        child: Container(
-                          padding: EdgeInsets.fromLTRB(60.w, 20.w, 60.w, 20.w),
-                          decoration: BoxDecoration(
-                            color: AppTheme.songDeatilBtnBg,
-                            borderRadius: BorderRadius.circular(20)
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(e['icon'], color: AppTheme.allWhite),
-                              SizedBox(width: 20.w),
-                              Text('${e['name']}', style: const TextStyle(color: AppTheme.allWhite, fontWeight: FontWeight.w700))
-                            ],
-                          ),
-                        )
-                      );
-                    }).toList()
+                    children: [
+                      BtnCatWidget(
+                        color: AppTheme.songDetailBtnCat,
+                        icon: const Icon(Icons.share, color: AppTheme.allWhite),
+                        name: widget.shareCount,
+                      ),
+                      BtnCatWidget(
+                        color: AppTheme.songDetailBtnCat,
+                        icon: const Icon(YunMusicFont.message, color: AppTheme.allWhite),
+                        name: widget.commentCount,
+                      ),
+                      BtnCatWidget(
+                        color: AppTheme.primary,
+                        icon: const Icon(Icons.collections_bookmark_outlined, color: AppTheme.allWhite),
+                        name: widget.subscribedCount,
+                      ),
+                    ]
                   )
                 ],
               ),
@@ -184,7 +270,6 @@ class _SongDetailViewState extends State<SongDetailView> {
             Transform.translate(
               offset: const Offset(0.0, -30.0),
               child: Container(
-                // width: double.infinity,
                 padding: EdgeInsets.only(top: 40.h, bottom: 120.h),
                 decoration: const BoxDecoration(
                   color: AppTheme.myBg,
@@ -240,7 +325,6 @@ class _SongDetailViewState extends State<SongDetailView> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Icon(YunMusicFont.love, size: 32.w, color: AppTheme.primary),
                                   SizedBox(width: 15.w),
                                   ...List.generate(
                                     userPlaylistData.songs![index].ar!.length,
@@ -285,6 +369,42 @@ class _SongDetailViewState extends State<SongDetailView> {
           ],
         )
       ),
+    );
+  }
+}
+
+
+class BtnCatWidget extends StatelessWidget {
+  final Color color;
+  final Icon icon;
+  final int name;
+
+  const BtnCatWidget({
+    required this.color,
+    required this.icon,
+    required this.name,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(45),
+      child: Container(
+        padding: EdgeInsets.fromLTRB(70.w, 16.w, 70.w, 16.w),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(20)
+        ),
+        child: Row(
+          children: [
+            // Icon(icon, color: AppTheme.allWhite),
+            icon,
+            SizedBox(width: 20.w),
+            Text('$name', style: const TextStyle(color: AppTheme.allWhite, fontWeight: FontWeight.w700))
+          ],
+        ),
+      )
     );
   }
 }

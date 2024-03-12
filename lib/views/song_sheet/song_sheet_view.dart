@@ -2,6 +2,14 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_music_player_app/theme/app_theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_music_player_app/api/song_sheet_api.dart';
+import 'package:flutter_music_player_app/model/playlist_hot_model.dart';
+import 'package:flutter_music_player_app/model/top_playlist_model.dart';
+import 'package:palette_generator/palette_generator.dart';
+import 'package:flutter_music_player_app/views/song_sheet/refresh/refresh_page.dart';
+
+
+
 
 class SongSheetView extends StatefulWidget {
   const SongSheetView({ Key? key }) : super(key: key);
@@ -10,18 +18,52 @@ class SongSheetView extends StatefulWidget {
   _SongSheetViewState createState() => _SongSheetViewState();
 }
 
-class _SongSheetViewState extends State<SongSheetView> with SingleTickerProviderStateMixin {
+class _SongSheetViewState extends State<SongSheetView> with TickerProviderStateMixin {
+
   late TabController _tabController;
+  PlaylistHotModel playlistHot = PlaylistHotModel();
+  TopPlaylistModel topPlaylist = TopPlaylistModel();
+
+
+  // 热门歌单分类
+  void getUserPlaylist() async {
+    SongSheetApi.getPlaylistHot().then((playlist){
+      if(playlist != null){
+        setState(() {
+          playlistHot = playlist;
+          _tabController = TabController(length: playlistHot.tags!.length, vsync: this);
+          _tabController.addListener(() {
+            if(_tabController.animation!.value == _tabController.index){
+              print('tabController.index:  ${_tabController.index}');
+            }
+          });
+        });
+      }
+    });
+  }
+
+  // // 获取图片上的颜色
+  // late PaletteGenerator _paletteGenerator;
+  // Future<void> _generatePalette() async {
+  //   // 从图片路径中获取主要颜色信息
+  //   final PaletteGenerator paletteGenerator = await PaletteGenerator.fromImageProvider(
+  //     const NetworkImage('https://p1.music.126.net/WgBpC28cUc1Be_wwseby-w==/109951169194614473.jpg?imageView=1&thumbnail=800y800&enlarge=1%7CimageView=1&watermark&type=1&image=b2JqL3c1bkRrTUtRd3JMRGpEekNtOE9tLzMyMjc1MTQ3NjUyL2Q4NGMvMjAyMzExMjExMTM1MS94NzIyMTcwMzEyNzgzMTA0OS5wbmc=&dx=0&dy=0%7Cwatermark&type=1&image=b2JqL3dvbkRsc0tVd3JMQ2xHakNtOEt4LzI3NjEwNDk3MDYyL2VlOTMvOTIxYS82NjE4LzdhMDc5ZDg0NTYyMDAwZmVkZWJmMjVjYjE4NjhkOWEzLnBuZw==&dx=0&dy=0%7CimageView=1&thumbnail=140y140&'),
+  //     size: const Size(100, 100), // 图片尺寸，可根据实际情况调整
+  //   );
+
+  //  _paletteGenerator = paletteGenerator;
+  //  print(paletteGenerator.dominantColor!.color);
+  //  print(paletteGenerator.lightVibrantColor);
+  //  print(paletteGenerator.vibrantColor);
+  // //  return paletteGenerator.dominantColor!.color;
+  // }
+
 
   @override
   void initState() {
+    getUserPlaylist();
+    // _generatePalette();
     super.initState();
-    _tabController = TabController(length: 8, vsync: this);
-    _tabController.addListener(() {
-      if(_tabController.animation!.value == _tabController.index){
-        print(_tabController.index);
-      }
-    });
   }
 
   @override
@@ -30,15 +72,16 @@ class _SongSheetViewState extends State<SongSheetView> with SingleTickerProvider
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(40),
         child: AppBar(
-            elevation: 0.5,
-            backgroundColor: Colors.white,
-            title: SizedBox(
-              height: 30,
+            elevation: 0,
+            backgroundColor: AppTheme.myBg,
+            title: playlistHot.tags == null || playlistHot.tags!.isEmpty ? const Text('')
+            : SizedBox(
+              height: 65.h,
               child: Stack(
                 children: [
                   Container(
                     margin: EdgeInsets.only(right: 100.w),
-                    child: TabBar(
+                    child:TabBar(
                       isScrollable: true,
                       controller: _tabController,
                       indicatorColor: AppTheme.primary,
@@ -48,34 +91,35 @@ class _SongSheetViewState extends State<SongSheetView> with SingleTickerProvider
                       labelStyle: const TextStyle(fontSize: 14),
                       unselectedLabelColor: Colors.grey[400],
                       indicatorSize: TabBarIndicatorSize.label,
-                      tabs: const [
-                        Tab(child: Text('关注', style: TextStyle(fontWeight: FontWeight.bold))),
-                        Tab(child: Text('热门', style: TextStyle(fontWeight: FontWeight.bold))),
-                        Tab(child: Text('视频', style: TextStyle(fontWeight: FontWeight.bold))),
-                        Tab(child: Text('娱乐', style: TextStyle(fontWeight: FontWeight.bold))),
-                        Tab(child: Text('篮球', style: TextStyle(fontWeight: FontWeight.bold))),
-                        Tab(child: Text('唱', style: TextStyle(fontWeight: FontWeight.bold))),
-                        Tab(child: Text('跳', style: TextStyle(fontWeight: FontWeight.bold))),
-                        Tab(child: Text('rap', style: TextStyle(fontWeight: FontWeight.bold))),
-                      ],
-                  ),
+                      tabs: playlistHot.tags!.map((e) {
+                        return Tab(
+                          child: Text(e.name,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold)));
+                      }).toList(),
+                    )
                   ),
                   Positioned(
                     top: 0,
                     right: 0,
                     bottom: 0,
-                    child: Container(
-                      width: 100.w,
-                      height: 100.w,
-                      color: Colors.white.withOpacity(0.5),
-                      child: ClipRect(
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 5.0),
-                          child: Container(
-                            color: Colors.white.withOpacity(0.1), // 背景颜色及透明度
-                            child: const Icon(Icons.keyboard_command_key_outlined)
+                    child: InkWell(
+                      onTap: (){
+                        
+                      },
+                      child: Container(
+                        width: 100.w,
+                        height: 100.w,
+                        color: Colors.white.withOpacity(0.5),
+                        child: ClipRect(
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 5.0),
+                            child: Container(
+                              color: Colors.white.withOpacity(0.2), // 背景颜色及透明度
+                              child: const Icon(Icons.keyboard_command_key_outlined, color: Colors.grey)
+                            )
                           )
-                        )
+                        ),
                       ),
                     )
                   )
@@ -83,85 +127,21 @@ class _SongSheetViewState extends State<SongSheetView> with SingleTickerProvider
               ),
             )),
       ),
-      body: TabBarView(controller: _tabController, children: [
-        ListView(
-            children: const [
-              ListTile(title: Text('关注....')),
-              ListTile(title: Text('关注....')),
-              ListTile(title: Text('关注....')),
-              ListTile(title: Text('关注....')),
-              ListTile(title: Text('关注....')),
-              ListTile(title: Text('关注....fghf')),
-              ListTile(title: Text('关注....')),
-              ListTile(title: Text('关注....dfg')),
-              ListTile(title: Text('关注....')),
-              ListTile(title: Text('关注....dfdg')),
-              ListTile(title: Text('关注....')),
-              ListTile(title: Text('关注....')),
-              ListTile(title: Text('关注....')),
-              ListTile(title: Text('关注....')),
-              ListTile(title: Text('关注....')),
-              ListTile(title: Text('关注....')),
-              ListTile(title: Text('关注....')),
-              ListTile(title: Text('关注....111')),
-              ListTile(title: Text('关注....222')),
-              ListTile(title: Text('关注....')),
-              ListTile(title: Text('关注....')),
-              ListTile(title: Text('关注....')),
-              ListTile(title: Text('关注....dfghdfh')),
-              ListTile(title: Text('关注....bottom')),
-            ],
+      body: playlistHot.tags == null || playlistHot.tags!.isEmpty ? 
+        const Text('')
+        : TabBarView(
+          controller: _tabController,
+          children: List.generate(
+            playlistHot.tags!.length,
+            (index) {
+              return Container(
+                padding: EdgeInsets.only(bottom: 120.h, left: 20.w, right: 20.w),
+                color: AppTheme.myBg,
+                child: RefreshPage(value:  playlistHot.tags![index].name),
+              );
+            },
+          ),
         ),
-        ListView(
-          children: const [ListTile(title: Text('热门....'))],
-        ),
-        ListView(
-          children: const [ListTile(title: Text('视频....'))],
-        ),
-        ListView(
-          children: const [ListTile(title: Text('娱乐....'))],
-        ),
-        ListView(
-          children: const [ListTile(title: Text('篮球....'))],
-        ),
-        ListView(
-          children: const [ListTile(title: Text('唱....'))],
-        ),
-        ListView(
-          children: const [ListTile(title: Text('跳....'))],
-        ),
-        ListView(
-          children: const [ListTile(title: Text('rap....'))],
-        )
-      ]),
     );
   }
 }
-
-// class CircleTabIndicator extends Decoration {
-//   final BoxPainter _painter;
-
-//   CircleTabIndicator({required Color color, required double radius})
-//       : _painter = _CirclePainter(color, radius);
-      
-//   @override
-//   BoxPainter createBoxPainter([VoidCallback? onChanged]) {
-//     return _painter;
-//   }
-// }
-
-// class _CirclePainter extends BoxPainter {
-//   final Paint _paint;
-//   final double radius;
-
-//   _CirclePainter(Color color, this.radius)
-//       : _paint = Paint()
-//           ..color = color
-//           ..isAntiAlias = true;
-
-//   @override
-//   void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
-//     final Rect rect = offset & configuration.size!;
-//     canvas.drawCircle(rect.center, radius, _paint);
-//   }
-// }
