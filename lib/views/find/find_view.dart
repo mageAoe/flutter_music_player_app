@@ -16,6 +16,8 @@ class FindView extends StatefulWidget {
 }
 
 class _FindViewState extends State<FindView> {
+
+  double safeAreaTop = 0.0;
   List<Banners> banner = <Banners>[];
   List menuList = [
     {'title': '每日推荐', 'icon': const Icon(YunMusicFont.ziyuan16, color: AppTheme.primary, size: 30)},
@@ -41,6 +43,11 @@ class _FindViewState extends State<FindView> {
 
   @override
   Widget build(BuildContext context) {
+    // 获取屏幕信息
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
+    // 获取刘海屏的高度
+    safeAreaTop = mediaQueryData.padding.top;
+
     return Scaffold(
         body: Container(
           decoration: const BoxDecoration(gradient: headLinearGradientStyle),
@@ -50,7 +57,7 @@ class _FindViewState extends State<FindView> {
               return <Widget>[
                 SliverToBoxAdapter(
                   child:Container(
-                    margin: EdgeInsets.only(top: 40.w, left: 20.w, right: 20.w,bottom: 60.w),
+                    margin: EdgeInsets.only(top: safeAreaTop - 20.w, left: 20.w, right: 20.w,bottom: 60.w),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
