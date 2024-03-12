@@ -36,11 +36,21 @@ class AppTheme {
   static const Color myLoveSingText = Color(0xFF3c3c3c);
   static const Color myLoveSingSubtext = Color(0xFF81858e); // 95969c a5a6ac 81858e
 
+  // my song deatil
+  static const Color mySongDetailBg = Color(0xFF8d494a);
+  static const Color mySongDetailBg2 = Color(0xFFa76163); // a76163
+  static const Color mySongDeatilBtnBg = Color(0xFFb77d7c); // b77d7c
+  static const Color mySongDeatilSamllSize = Color(0xFFdfb4b2); // dfb4b2
+
   // song deatil
-  static const Color songDetailBg = Color(0xFF8d494a);
-  static const Color songDetailBg2 = Color(0xFFa76163); // a76163
-  static const Color songDeatilBtnBg = Color(0xFFb77d7c); // b77d7c
-  static const Color songDeatilSamllSize = Color(0xFFdfb4b2); // dfb4b2
+  static const Color songDetailBg = Color(0xFF494a8b); // 6260a9
+  static const Color songDetailBg2 = Color(0xFF6260a9); // 6260a9
+  static const Color songDetailBtnCat = Color(0xFF7374ac); //7374ac
+  static const Color songDetailBtn = Color(0xFF7d7eb6);  // 7d7eb6
+  static const Color songDetailSubText = Color(0xFFb0b5df); // b0b5df
+  static const Color songDetailCoverBg = Color(0xFF484441); // 484441
+  static const Color songDetailCoverBg2 = Color(0xFF5b5650); // 5b5650
+
 
   // 备用色调
   static const Color primaryColor1 = Color.fromARGB(237, 252, 243, 236);

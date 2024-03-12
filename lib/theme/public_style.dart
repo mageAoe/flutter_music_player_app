@@ -14,12 +14,33 @@ const LinearGradient headLinearGradientStyle = LinearGradient(
 );
 
 
-// 歌单详情 - 头部渐变色样式
+// 我的 歌单详情 - 头部渐变色样式
+const LinearGradient mySongDetailHeadLinearGradientStyle = LinearGradient(
+  begin: Alignment.topCenter,
+  end: Alignment.center,
+  colors: [
+    AppTheme.mySongDetailBg,
+    AppTheme.mySongDetailBg2, 
+  ],
+);
+
+
+// 歌单导航 歌单详情 - 头部渐变色样式
 const LinearGradient songDetailHeadLinearGradientStyle = LinearGradient(
   begin: Alignment.topCenter,
   end: Alignment.center,
   colors: [
     AppTheme.songDetailBg,
     AppTheme.songDetailBg2, 
+  ],
+);
+
+// 封面页 展示
+const LinearGradient coverHeadLinearGradientStyle = LinearGradient(
+  begin: Alignment.topCenter,
+  end: Alignment.center,
+  colors: [
+    AppTheme.songDetailCoverBg,
+    AppTheme.songDetailCoverBg2, 
   ],
 );
