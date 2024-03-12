@@ -24,24 +24,24 @@ class HttpClient {
   /// query 请求的参数
   Future getJsonData(String url, {bool useCache = true, checkCacheTimeout = true, String query = '',bool isLoginCache = true, int? id}) async{
     var data;
+    String responseUrl = query == '' ? url : '$url?$query';
     if (useCache) {
       // 有些资源是动态的,如播放地址，会过期不能使用缓存。
-      String cache = await APICache.getCache(url, checkCacheTimeout: checkCacheTimeout, isLoginCache: isLoginCache);
+      String cache = await APICache.getCache(responseUrl, checkCacheTimeout: checkCacheTimeout, isLoginCache: isLoginCache);
       if (cache != '') {
         try {
           data = jsonDecode(cache);
         } catch (e) {
-          APICache.deleteCache(url);
+          APICache.deleteCache(responseUrl);
         }
       }
     }
-    // APICache.deleteCache('playlist/track/all'); // 缓存错误的数据删除
+    // APICache.deleteCache('top/playlist'); // 缓存错误的数据删除
     // 缓存没取到，就请求网络。
     if (data == null) {
       /// 这儿文本要缓存处理，所以ResponseType不用默认的json格式
       /// 或者使用 jsonEncode将Map对象转为json字符串，不要用toString，会丢掉符号信息。
       try {
-        String responseUrl = query == '' ? url : '$url?$query';
         print('responseUrl: $responseUrl');
         Response response = await dio.get(responseUrl);
         if (response.statusCode == HttpStatus.ok) {
@@ -50,9 +50,9 @@ class HttpClient {
           data = jsonDecode(jsonString);
           if (useCache) {
             // 缓存到本地
-            // String cacheUrl = id == null? url : '$url/$id'; // 为了缓存歌单
-            bool re = await APICache.saveCache(url, jsonString);
-            print('saveCache $url result: $re');
+            String cacheUrl = id == null? responseUrl : '$url/$id'; // 为了缓存歌单
+            bool re = await APICache.saveCache(cacheUrl, jsonString);
+            print('saveCache $cacheUrl result: $re');
           }
         } else {
           throw Exception('Request failed, errorCode: ${response.statusCode}');
