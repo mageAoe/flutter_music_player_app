@@ -29,7 +29,7 @@ class Songs {
     this.al,
     this.dt,
     // this.h,
-    this.m,
+    // this.m,
     this.l,
     // this.sq,
     this.cd,
@@ -66,7 +66,7 @@ class Songs {
   Al? al;
   int? dt;
   // H? h;
-  M? m;
+  // M? m;
   L? l;
   // Sq? sq;
   String? cd;
@@ -104,7 +104,7 @@ class Songs {
     al = Al.fromJson(json['al']);
     dt = json['dt'];
     // h = H.fromJson(json['h']);
-    m = M.fromJson(json['m']);
+    // m = M.fromJson(json['m']);
     l = L.fromJson(json['l']);
     // sq = Sq.fromJson(json['sq']);
     cd = json['cd'];
