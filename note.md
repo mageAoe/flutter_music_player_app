@@ -16,6 +16,8 @@
 - 轮播图： flutter_swiper_view
 - 骨架屏： skeletonizer
 - 状态管理： provider
+- 加载动画： flutter_spinkit
+- 用于提取图片上的主色： palette_generator
 
 
 ### 目录结构: 

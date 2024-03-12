@@ -45,6 +45,8 @@ dependencies:
   flutter_swiper_view: ^1.1.8
   skeletonizer: ^1.0.1
   provider:
+  palette_generator: ^0.3.3+3
+  flutter_spinkit: ^5.2.0
 
 dev_dependencies:
   flutter_test:
