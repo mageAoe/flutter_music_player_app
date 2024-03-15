@@ -3,6 +3,9 @@ import 'dart:math' as math;
 import 'package:flutter_music_player_app/theme/app_theme.dart';
 import 'package:flutter_music_player_app/main.dart';
 import './tabIcon_data.dart';
+// import 'package:flutter_music_player_app/views/play/play_music_view.dart';
+
+
 
 class BottomBarView extends StatefulWidget {
   final int index;
@@ -128,7 +131,17 @@ class _BottomBarViewState extends State<BottomBarView> with TickerProviderStateM
               );
             }
         ),
-        PlayerWidget(animationController: animationController, addClick: (){}),
+        PlayerWidget(
+          animationController: animationController, 
+          addClick: (){
+            // Navigator.push( 
+            //     context,
+            //     MaterialPageRoute(builder: (context) {
+            //       return const PlayMusicWidget();
+            //     }),
+            //   );
+          }
+        ),
       ]
     );
   }
