@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_music_player_app/api/song_sheet_api.dart';
 import 'package:flutter_music_player_app/model/playlist_hot_model.dart';
 import 'package:flutter_music_player_app/model/top_playlist_model.dart';
-import 'package:palette_generator/palette_generator.dart';
 import 'package:flutter_music_player_app/views/song_sheet/refresh/refresh_page.dart';
 
 
@@ -42,22 +41,6 @@ class _SongSheetViewState extends State<SongSheetView> with TickerProviderStateM
     });
   }
 
-  // // 获取图片上的颜色
-  // late PaletteGenerator _paletteGenerator;
-  // Future<void> _generatePalette() async {
-  //   // 从图片路径中获取主要颜色信息
-  //   final PaletteGenerator paletteGenerator = await PaletteGenerator.fromImageProvider(
-  //     const NetworkImage('https://p1.music.126.net/WgBpC28cUc1Be_wwseby-w==/109951169194614473.jpg?imageView=1&thumbnail=800y800&enlarge=1%7CimageView=1&watermark&type=1&image=b2JqL3c1bkRrTUtRd3JMRGpEekNtOE9tLzMyMjc1MTQ3NjUyL2Q4NGMvMjAyMzExMjExMTM1MS94NzIyMTcwMzEyNzgzMTA0OS5wbmc=&dx=0&dy=0%7Cwatermark&type=1&image=b2JqL3dvbkRsc0tVd3JMQ2xHakNtOEt4LzI3NjEwNDk3MDYyL2VlOTMvOTIxYS82NjE4LzdhMDc5ZDg0NTYyMDAwZmVkZWJmMjVjYjE4NjhkOWEzLnBuZw==&dx=0&dy=0%7CimageView=1&thumbnail=140y140&'),
-  //     size: const Size(100, 100), // 图片尺寸，可根据实际情况调整
-  //   );
-
-  //  _paletteGenerator = paletteGenerator;
-  //  print(paletteGenerator.dominantColor!.color);
-  //  print(paletteGenerator.lightVibrantColor);
-  //  print(paletteGenerator.vibrantColor);
-  // //  return paletteGenerator.dominantColor!.color;
-  // }
-
 
   @override
   void initState() {
@@ -74,7 +57,10 @@ class _SongSheetViewState extends State<SongSheetView> with TickerProviderStateM
         child: AppBar(
             elevation: 0,
             backgroundColor: AppTheme.myBg,
-            title: playlistHot.tags == null || playlistHot.tags!.isEmpty ? const Text('')
+            title: playlistHot.tags == null || playlistHot.tags!.isEmpty 
+            ? const Center(
+              child: Text('1211')
+              )
             : SizedBox(
               height: 65.h,
               child: Stack(
@@ -127,8 +113,10 @@ class _SongSheetViewState extends State<SongSheetView> with TickerProviderStateM
               ),
             )),
       ),
-      body: playlistHot.tags == null || playlistHot.tags!.isEmpty ? 
-        const Text('')
+      body: playlistHot.tags == null || playlistHot.tags!.isEmpty 
+      ? const Center(
+          child: Text('重新加载')
+        )
         : TabBarView(
           controller: _tabController,
           children: List.generate(

@@ -301,7 +301,12 @@ class SinglesSectionWidget extends StatelessWidget {
             },
             child: ClipRRect(
               borderRadius: const BorderRadius.all(Radius.circular(10)),
-              child: Image.network('${topPlay.coverImgUrl}', fit: BoxFit.cover),
+              // child: Image.network('${topPlay.coverImgUrl}', fit: BoxFit.cover),
+              child: FadeInImage.assetNetwork(
+                fit: BoxFit.cover,
+                placeholder: 'assets/images/placeholder.gif',
+                image: '${topPlay.coverImgUrl}',
+              ),
             ),
           ),
           Positioned(
