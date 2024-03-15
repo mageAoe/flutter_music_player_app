@@ -74,6 +74,7 @@ class _MyViewState extends State<MyView> with SingleTickerProviderStateMixin {
           userPlaylistData = playlist;
         });
       }
+      print('playlist: $playlist');
       setIsMyLoading(false);
     });
   }
@@ -147,9 +148,7 @@ class _MyViewState extends State<MyView> with SingleTickerProviderStateMixin {
           ],
         ),
       ),
-      body: Skeletonizer(
-        enabled: isMyLoading,
-        child: Stack(
+      body: Stack(
           children: [
             SingleChildScrollView(
               controller: scrollController,
@@ -158,9 +157,10 @@ class _MyViewState extends State<MyView> with SingleTickerProviderStateMixin {
                   SizedBox(
                     width: double.infinity,
                     // child: MyNotLoginTopWidget(iconsList: iconsList,safeAreaTop: safeAreaTop),
-                   child: userDetailData.isEmpty() && isMyLoading
-                    ? MyNotLoginTopWidget(iconsList: iconsList) 
-                    : MyLoginTopWidget(userDetailData: userDetailData, iconsList: iconsList),
+                   child: Skeletonizer(
+                      enabled: isMyLoading,
+                      child: userDetailData.isEmpty()? MyNotLoginTopWidget(iconsList: iconsList) : MyLoginTopWidget(userDetailData: userDetailData, iconsList: iconsList)
+                    ),
                   ),
                   Transform.translate(
                     offset: const Offset(0.0, -40.0),
@@ -201,7 +201,6 @@ class _MyViewState extends State<MyView> with SingleTickerProviderStateMixin {
             ): const Text('')
           ],
         ),
-      )
     );
   }
 }
