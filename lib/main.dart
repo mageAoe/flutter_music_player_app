@@ -10,11 +10,29 @@ import 'package:flutter_music_player_app/pages/introduction_view/introduction_vi
 
 import 'package:flutter_music_player_app/test/slideTransition_demo.dart';
 
+import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter_music_player_app/views/play/play_music_view.dart';
+import 'package:flutter_music_player_app/utlis/color_thief.dart';
+import 'package:flutter_music_player_app/views/play/play_controller.dart';
+
+
 void main() {
   // 设置为透明
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-  runApp(const MyApp());
+  runApp(_buildProvider());
 }
+
+
+_buildProvider() {
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider<Shop>.value(value: Shop()),
+      ChangeNotifierProvider<MusicController>.value(value: MusicController()),
+    ],
+    child: const MyApp(),
+  );
+}
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -26,18 +44,17 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context , child){
-        return ChangeNotifierProvider<Shop>(
-          create: (context) => Shop(),
-          child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            theme: appMusicTheme,
-            routes: {
-              '/MainPage': (ctx) => const NavigationHomeScreen(),
-            },
-            home: const NavigationHomeScreen(),
-            // home: const IntroductionAnimationScreen(),
-            // home: const MyHomePage(),
-          ),
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: appMusicTheme,
+          routes: {
+            '/MainPage': (ctx) => const NavigationHomeScreen(),
+          },
+          // home: const NavigationHomeScreen(),
+          home:  const PlayMusicWidget(),
+          // home: const ColorsThiefWidget(),
+          // home: const IntroductionAnimationScreen(),
+          // home: const MyHomePage(),
         );
       }
     );
