@@ -3,7 +3,7 @@
 ### 插件
 
 - 网络请求：dio
-- 图片缓存CachedNetworkImage实现图片持久化到本地，Flutter默认缓存到内存，但不持久化。
+- 图片缓存cached_network_image(实现图片持久化到本地，Flutter默认缓存到内存，但不持久化)
 - 音乐播放：audioplayer
 - 视频播放：video_player (底层原理是各平台实现对应播放器，例如Android端使用EXOPlayer)
 - 网络连接检测：connectivity_plus
@@ -15,10 +15,10 @@
 - 文件读取：path_provider + dart:io
 - 轮播图： flutter_swiper_view
 - 骨架屏： skeletonizer
-- 状态管理： provider
+- 状态管理： provider (全局状态维护，全局皮肤、播放状态)
 - 加载动画： flutter_spinkit
 - 用于提取图片上的主色： palette_generator
-
+- Toast提示：fluttertoast
 
 ### 目录结构: 
 
@@ -34,6 +34,7 @@
 - https://niyangup.github.io/2020/02/18/Flutter%E4%B8%AD%E5%BA%95%E9%83%A8Tab%E5%88%87%E6%8D%A2%E4%BF%9D%E6%8C%81%E9%A1%B5%E9%9D%A2%E7%8A%B6%E6%80%81-%E7%BC%93%E5%AD%98-%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E6%B3%95/
 - https://juejin.cn/post/6979972557575782407
 - https://www.flutter-study.dev/firebase-app/provider
+- https://hiyoko-programming.com/2059/
 
 Flutter Theme : https://itome.team/blog/2019/12/flutter-advent-calendar-day12/
 
