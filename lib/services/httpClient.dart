@@ -66,24 +66,43 @@ class HttpClient {
     return data;
   }
 
-  Future get(String apiUrl) async {
-    try {
-      var res = await dio.get(apiUrl);
-      return res;
-    } catch (e) {
-      print('请求超时');
-      print(e);
-      return null;
-    }
+  // 下载mp3到本地
+  /// [url] 要下载的资源地址
+  /// [savePath] 要保存的本地路径
+  static void download(String url, String savePath) {
+    print('download $url to $savePath');
+    File localFile = File(savePath);
+    localFile.exists().then((exists) {
+      if (!exists) {
+        localFile.createSync(recursive: true);
+      }
+      return Dio().download(url, savePath);
+    }).then((response) {
+      if (response.statusCode == 200) {
+        print('下载成功');
+      } else {
+        print('下载失败：${response.statusCode}');
+      }
+    });
   }
 
-  Future post(String apiUrl, {Map? data }) async {
+  // 获取重定向之后的地址
+  static Future<String> getRedirectedUrl(String path) async {
     try {
-      var res = await dio.post(apiUrl, data: data);
-      return res;
+      Response response = await dio.head(path);
+      if (response.isRedirect == true) {
+        String redirectedUrl = response.realUri.toString();
+        print("重定向后的地址：$redirectedUrl");
+        String replaceUrl = redirectedUrl.replaceAll('http', 'https');
+        print("替换后的地址：$replaceUrl");
+        return replaceUrl;
+      } else {
+        print("没有发生重定向");
+        return path;
+      }
     } catch (e) {
-      print('请求超时');
-      return null;
+      print("发生错误：$e");
+      return path;
     }
   }
 

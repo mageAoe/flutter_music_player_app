@@ -65,4 +65,8 @@ class Api {
   static String URL_PLAYLIST_HIGHQUALITY = 'playlist/highquality/tags'; //  playlist/highquality/tags
   // 搜索
   static const URL_SEARCH = 'search'; // keywords=
+  // 获取播放地址
+  static const URL_PLAY_URL = 'song/url'; // id=2116253260
+  // 获取歌词
+  static const URL_LYRIC = 'lyric'; // id=2116253260
 }
