@@ -1,6 +1,9 @@
 import 'dart:io';
 import 'dart:async';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_music_player_app/services/httpClient.dart';
+import 'package:flutter_music_player_app/utlis/song_util.dart';
+
 
 /// 本地文件工具类
 class FileUtil{
@@ -80,6 +83,14 @@ class FileUtil{
   static bool isTimeOut(DateTime lastTime, Duration duration) {
     DateTime now = DateTime.now();
     return now.isAfter(lastTime.add(duration));
+  }
+
+  // 下载音频文件
+  static Future<void> downloadMp3(int songId) async {
+    String savePath = await FileUtil.getSongLocalPath(songId);
+    String url = SongUtil.getSongUrl(songId);
+    HttpClient.download(url, savePath);
+    print('download: $url');
   }
 
 }
