@@ -13,21 +13,11 @@ class TopPlaylistModel {
   String? cat;
   
   TopPlaylistModel.fromJson(Map<String, dynamic> json){
-    playlists = List.from(json['playlists']).map((e)=>Playlists.fromJson(e)).toList();
+    playlists = List.from(json['playlists']).map((e)=>Playlists?.fromJson(e)).toList();
     total = json['total'];
     code = json['code'];
     more = json['more'];
     cat = json['cat'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['playlists'] = playlists!.map((e)=>e.toJson()).toList();
-    data['total'] = total;
-    data['code'] = code;
-    data['more'] = more;
-    data['cat'] = cat;
-    return data;
   }
 }
 
@@ -152,59 +142,15 @@ class Playlists {
     recommendInfo = json['recommendInfo'];
     socialPlaylistCover = json['socialPlaylistCover'];
     recommendText = json['recommendText'];
-    coverText = List.castFrom<dynamic, String>(json['coverText']);
     relateResType = json['relateResType'];
     relateResId = json['relateResId'];
     shareCount = json['shareCount'];
     coverImgIdStr = json['coverImgId_str'];
     alg = json['alg'];
     commentCount = json['commentCount'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['name'] = name;
-    data['id'] = id;
-    data['trackNumberUpdateTime'] = trackNumberUpdateTime;
-    data['status'] = status;
-    data['userId'] = userId;
-    data['createTime'] = createTime;
-    data['updateTime'] = updateTime;
-    data['subscribedCount'] = subscribedCount;
-    data['trackCount'] = trackCount;
-    data['cloudTrackCount'] = cloudTrackCount;
-    data['coverImgUrl'] = coverImgUrl;
-    data['iconImgUrl'] = iconImgUrl;
-    data['coverImgId'] = coverImgId;
-    data['description'] = description;
-    data['tags'] = tags;
-    data['playCount'] = playCount;
-    data['trackUpdateTime'] = trackUpdateTime;
-    data['specialType'] = specialType;
-    data['totalDuration'] = totalDuration;
-    data['creator'] = creator!.toJson();
-    data['tracks'] = tracks;
-    data['subscribers'] = subscribers!.map((e)=>e.toJson()).toList();
-    data['subscribed'] = subscribed;
-    data['commentThreadId'] = commentThreadId;
-    data['newImported'] = newImported;
-    data['adType'] = adType;
-    data['highQuality'] = highQuality;
-    data['privacy'] = privacy;
-    data['ordered'] = ordered;
-    data['anonimous'] = anonimous;
-    data['coverStatus'] = coverStatus;
-    data['recommendInfo'] = recommendInfo;
-    data['socialPlaylistCover'] = socialPlaylistCover;
-    data['recommendText'] = recommendText;
-    data['coverText'] = coverText;
-    data['relateResType'] = relateResType;
-    data['relateResId'] = relateResId;
-    data['shareCount'] = shareCount;
-    data['coverImgId_str'] = coverImgIdStr;
-    data['alg'] = alg;
-    data['commentCount'] = commentCount;
-    return data;
+    if(json['coverText'] != null){
+      coverText = List.castFrom<dynamic, String>(json['coverText']);
+    }
   }
 }
 
@@ -299,48 +245,15 @@ class Creator {
     vipType = json['vipType'];
     remarkName = json['remarkName'];
     authenticationTypes = json['authenticationTypes'];
-    avatarDetail = AvatarDetail.fromJson(json['avatarDetail']);
     anchor = json['anchor'];
     avatarImgIdStr = json['avatarImgIdStr'];
     backgroundImgIdStr = json['backgroundImgIdStr'];
     avatarImgIdStr = json['avatarImgId_str'];
+    if(json['avatarDetail'] != null){
+      avatarDetail = AvatarDetail?.fromJson(json['avatarDetail']);
+    }
   }
 
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['defaultAvatar'] = defaultAvatar;
-    data['province'] = province;
-    data['authStatus'] = authStatus;
-    data['followed'] = followed;
-    data['avatarUrl'] = avatarUrl;
-    data['accountStatus'] = accountStatus;
-    data['gender'] = gender;
-    data['city'] = city;
-    data['birthday'] = birthday;
-    data['userId'] = userId;
-    data['userType'] = userType;
-    data['nickname'] = nickname;
-    data['signature'] = signature;
-    data['description'] = description;
-    data['detailDescription'] = detailDescription;
-    data['avatarImgId'] = avatarImgId;
-    data['backgroundImgId'] = backgroundImgId;
-    data['backgroundUrl'] = backgroundUrl;
-    data['authority'] = authority;
-    data['mutual'] = mutual;
-    data['expertTags'] = expertTags;
-    data['experts'] = experts;
-    data['djStatus'] = djStatus;
-    data['vipType'] = vipType;
-    data['remarkName'] = remarkName;
-    data['authenticationTypes'] = authenticationTypes;
-    data['avatarDetail'] = avatarDetail!.toJson();
-    data['anchor'] = anchor;
-    data['avatarImgIdStr'] = avatarImgIdStr;
-    data['backgroundImgIdStr'] = backgroundImgIdStr;
-    data['avatarImgId_str'] = avatarImgIdStr;
-    return data;
-  }
 }
 
 class AvatarDetail {
@@ -357,14 +270,6 @@ class AvatarDetail {
     userType = json['userType'];
     identityLevel = json['identityLevel'];
     identityIconUrl = json['identityIconUrl'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['userType'] = userType;
-    data['identityLevel'] = identityLevel;
-    data['identityIconUrl'] = identityIconUrl;
-    return data;
   }
 }
 
