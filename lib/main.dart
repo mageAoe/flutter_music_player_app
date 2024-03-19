@@ -14,11 +14,14 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_music_player_app/views/play/play_music_view.dart';
 import 'package:flutter_music_player_app/utlis/color_thief.dart';
 import 'package:flutter_music_player_app/views/play/play_controller.dart';
+// import 'package:flutter_music_player_app/views/play/play_controller_demo.dart';
 
 
 void main() {
   // 设置为透明
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+  // 初始化
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(_buildProvider());
 }
 
@@ -50,8 +53,8 @@ class MyApp extends StatelessWidget {
           routes: {
             '/MainPage': (ctx) => const NavigationHomeScreen(),
           },
-          // home: const NavigationHomeScreen(),
-          home:  const PlayMusicWidget(),
+          home: const NavigationHomeScreen(),
+          // home:  const PlayMusicWidget(),
           // home: const ColorsThiefWidget(),
           // home: const IntroductionAnimationScreen(),
           // home: const MyHomePage(),
