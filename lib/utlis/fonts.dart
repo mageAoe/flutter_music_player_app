@@ -182,4 +182,32 @@ class YunMusicFont {
     fontFamily: 'yunMusic',
     matchTextDirection : true
   );
+
+  // 随机播放
+  static const IconData randomXunhuan = IconData(
+    0xe610,
+    fontFamily: 'yunMusic',
+    matchTextDirection : true
+  );
+
+  // 单曲循环
+  static const IconData xunhuan = IconData(
+    0xe66d,
+    fontFamily: 'yunMusic',
+    matchTextDirection : true
+  );
+
+  // 列表循环
+  static const IconData listXunhuan = IconData(
+    0xe62b,
+    fontFamily: 'yunMusic',
+    matchTextDirection : true
+  );
+
+  // 播放列表
+  static const IconData playList = IconData(
+    0xe954,
+    fontFamily: 'yunMusic',
+    matchTextDirection : true
+  );
 }
