@@ -46,21 +46,25 @@ class SongDetailView extends StatefulWidget {
 
 class _SongDetailViewState extends State<SongDetailView> {
   
-  PlaylistTrackAllModel userPlaylistData = PlaylistTrackAllModel();
+  List<Songs> songLists = [];
+  bool isLoading = false;
   int offset = 0;
   int limit = 20;
   double safeAreaTop = 0.0;
   ScrollController scrollController = ScrollController();
 
   // 获取歌单里面的歌曲
-  checkLoginStatus() async {
+  getPlaylistTrackAll() async {
+    isLoading = true;
     MyApi.getPlaylistTrackAll('id=${widget.id}&limit=$limit&offset=$offset').then((playlist){
       if(playlist != null){
-        print('playlist: $playlist');
-          setState(() {
-            userPlaylistData = playlist;
-          });
-        }
+        // print('playlist: $playlist');
+        setState(() {
+          // userPlaylistData = playlist;
+          songLists.addAll(playlist.songs as Iterable<Songs>);
+        });
+      }
+      isLoading = false;
     });
   }
 
@@ -76,7 +80,13 @@ class _SongDetailViewState extends State<SongDetailView> {
   @override
   void initState() {
     print('widget.id:  ${widget.id}');
-    checkLoginStatus();
+    getPlaylistTrackAll();
+    scrollController.addListener(() {
+      if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+        offset++;
+        getPlaylistTrackAll();
+      }
+    });
     super.initState();
   }
 
@@ -88,7 +98,7 @@ class _SongDetailViewState extends State<SongDetailView> {
     safeAreaTop = mediaQueryData.padding.top;
 
     return Scaffold(
-      extendBodyBehindAppBar: true, // 扩展body区域到AppBar
+      extendBodyBehindAppBar: true,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(120.h),
         child: AppBar(
@@ -270,7 +280,7 @@ class _SongDetailViewState extends State<SongDetailView> {
             Transform.translate(
               offset: const Offset(0.0, -30.0),
               child: Container(
-                padding: EdgeInsets.only(top: 40.h, bottom: 120.h),
+                padding: EdgeInsets.only(top: 40.h, bottom: 140.h),
                 decoration: const BoxDecoration(
                   color: AppTheme.myBg,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(30.0)),
@@ -282,7 +292,7 @@ class _SongDetailViewState extends State<SongDetailView> {
                       title: Row(
                         children: [
                           const Text('播放全部'),
-                          Text('${userPlaylistData.songs?.length}首')
+                          Text('${songLists.length}首')
                         ],
                       ),
                       trailing: Row(
@@ -296,9 +306,9 @@ class _SongDetailViewState extends State<SongDetailView> {
                         ],
                       ),
                     ),
-                    if (userPlaylistData.songs != null && userPlaylistData.songs!.isNotEmpty)
+                    if (songLists.isNotEmpty)
                       ...List.generate(
-                        userPlaylistData.songs!.length,
+                        songLists.length,
                         (index) => ListTile(
                           leading: Text('${index + 1}'), // 递增的数字
                           title: Column(
@@ -312,7 +322,7 @@ class _SongDetailViewState extends State<SongDetailView> {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      '${userPlaylistData.songs![index].name} ${getTns(userPlaylistData.songs![index].tns)}', 
+                                      '${songLists[index].name} ${getTns(songLists[index].tns)}', 
                                       overflow: TextOverflow.ellipsis, maxLines: 1
                                     )
                                   ),
@@ -327,12 +337,12 @@ class _SongDetailViewState extends State<SongDetailView> {
                                 children: [
                                   SizedBox(width: 15.w),
                                   ...List.generate(
-                                    userPlaylistData.songs![index].ar!.length,
+                                    songLists[index].ar!.length,
                                     (arIndex) {
-                                      if(arIndex == userPlaylistData.songs![index].ar!.length - 1){
-                                        return Text('${userPlaylistData.songs![index].ar![arIndex].name}', style: TextStyle(fontSize: 36.sp,color: AppTheme.myLoveSingSubtext));
+                                      if(arIndex == songLists[index].ar!.length - 1){
+                                        return Text('${songLists[index].ar![arIndex].name}', style: TextStyle(fontSize: 36.sp,color: AppTheme.myLoveSingSubtext));
                                       }else{
-                                        return Text('${userPlaylistData.songs![index].ar![arIndex].name} / ', style: TextStyle(fontSize: 36.sp,color: AppTheme.myLoveSingSubtext));
+                                        return Text('${songLists[index].ar![arIndex].name} / ', style: TextStyle(fontSize: 36.sp,color: AppTheme.myLoveSingSubtext));
                                       }
                                     }
                                   ),
@@ -342,7 +352,7 @@ class _SongDetailViewState extends State<SongDetailView> {
                                   ),
                                   Expanded(
                                     child: Text(
-                                      '${userPlaylistData.songs![index].al!.name}', 
+                                      '${songLists[index].al!.name}', 
                                       style: TextStyle(fontSize: 36.sp,color: AppTheme.myLoveSingSubtext), overflow: TextOverflow.ellipsis)
                                   )
                                 ],
@@ -362,6 +372,7 @@ class _SongDetailViewState extends State<SongDetailView> {
                           ),
                         ),
                       ),
+                    isLoading ? const Center(child: CircularProgressIndicator(color: AppTheme.primary)) : const Text(''),
                   ],
                 ),
               ),

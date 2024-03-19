@@ -5,10 +5,13 @@ import 'package:flutter_music_player_app/theme/public_style.dart';
 import 'package:flutter_music_player_app/utlis/fonts.dart';
 import 'package:flutter_music_player_app/api/my_api.dart';
 import 'package:flutter_music_player_app/model/playlist_track_all_model.dart';
+import 'package:flutter_music_player_app/views/play/play_music_view.dart';
+
 
 
 class SongDetailView extends StatefulWidget {
   final int id;
+  final int limit;
   final String coverImgUrl;
   final String name;
   final String? nickname;
@@ -16,6 +19,7 @@ class SongDetailView extends StatefulWidget {
 
   const SongDetailView({
     super.key, 
+    required this.limit,
     required this.id, 
     required this.coverImgUrl,
     required this.name,
@@ -31,7 +35,7 @@ class _SongDetailViewState extends State<SongDetailView> {
   
   PlaylistTrackAllModel userPlaylistData = PlaylistTrackAllModel();
   int offset = 0;
-  int limit = 20;
+  bool isLoading = false;
   double safeAreaTop = 0.0;
   ScrollController scrollController = ScrollController();
 
@@ -43,14 +47,15 @@ class _SongDetailViewState extends State<SongDetailView> {
 
   // 获取歌单里面的歌曲
   checkLoginStatus() async {
-    MyApi.getPlaylistTrackAll('id=${widget.id}&limit=$limit&offset=$offset').then((playlist){
+    setState(() {isLoading = true;});
+    MyApi.getPlaylistTrackAll('id=${widget.id}&limit=${widget.limit}&offset=$offset').then((playlist){
       if(playlist != null){
-        print('playlist: $playlist');
-          setState(() {
-            userPlaylistData = playlist;
-          });
-        }
-    });
+        // print('playlist: $playlist');
+        setState(() {
+          userPlaylistData = playlist;
+        });
+      }
+    }).whenComplete(() => setState(() {isLoading = false;}));
   }
 
   String getTns(List<String>? tns){
@@ -61,12 +66,101 @@ class _SongDetailViewState extends State<SongDetailView> {
     }
   }
 
+  String getSongName(List<Ar>? ars, String? name){
+    String text = "";
+    for (var i = 0; i < ars!.length; i++) {
+      if(i == ars.length - 1){
+        text += '${ars[i].name}';
+      }else{
+        text += '${ars[i].name} / ';
+      }
+    }
+    text += ' - $name';
+    return text;
+  }
+
 
   @override
   void initState() {
     print('widget.id:  ${widget.id}');
     checkLoginStatus();
     super.initState();
+  }
+
+  Widget _buildSongList(){
+    return Column(
+      children: [
+        ...List.generate(
+          userPlaylistData.songs!.length,
+          (index) => ListTile(
+            leading: Text('${index + 1}'), // 递增的数字
+            title: InkWell(
+              onTap: (){
+                // 跳转播放
+                PlayMusicWidget.gotoPlayer(context, list: userPlaylistData.songs, index: index);
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    textDirection: TextDirection.ltr,
+                    textBaseline: TextBaseline.alphabetic,
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          '${userPlaylistData.songs![index].name} ${getTns(userPlaylistData.songs![index].tns)}', 
+                          overflow: TextOverflow.ellipsis, maxLines: 1
+                        )
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 15.h),
+                  Row(
+                    textBaseline: TextBaseline.alphabetic,
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(YunMusicFont.love, size: 32.w, color: AppTheme.primary),
+                      SizedBox(width: 15.w),
+                      Expanded(
+                        child: Text(getSongName(userPlaylistData.songs![index].ar, userPlaylistData.songs![index].al!.name), 
+                          style: TextStyle(fontSize: 36.sp,color: AppTheme.myLoveSingSubtext), overflow: TextOverflow.ellipsis)
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            trailing: const Icon(Icons.more_vert_outlined),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _buildItems(){
+    if(isLoading){
+      return SizedBox(
+        height: 500.h,
+        child: const Center(child: LinearProgressIndicator()));
+    }else{
+      if(userPlaylistData.songs != null && userPlaylistData.songs!.isNotEmpty){
+        return _buildSongList();
+      }else{
+        return SizedBox(
+          height: 500.h,
+          child: Center(
+            child: Text(
+              '暂无歌曲',
+              style: TextStyle(fontSize: 44.sp, fontWeight: FontWeight.bold, color: AppTheme.myLoveSingText),
+            ),
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -184,7 +278,6 @@ class _SongDetailViewState extends State<SongDetailView> {
             Transform.translate(
               offset: const Offset(0.0, -30.0),
               child: Container(
-                // width: double.infinity,
                 padding: EdgeInsets.only(top: 40.h, bottom: 120.h),
                 decoration: const BoxDecoration(
                   color: AppTheme.myBg,
@@ -211,73 +304,7 @@ class _SongDetailViewState extends State<SongDetailView> {
                         ],
                       ),
                     ),
-                    if (userPlaylistData.songs != null && userPlaylistData.songs!.isNotEmpty)
-                      ...List.generate(
-                        userPlaylistData.songs!.length,
-                        (index) => ListTile(
-                          leading: Text('${index + 1}'), // 递增的数字
-                          title: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                textDirection: TextDirection.ltr,
-                                textBaseline: TextBaseline.alphabetic,
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      '${userPlaylistData.songs![index].name} ${getTns(userPlaylistData.songs![index].tns)}', 
-                                      overflow: TextOverflow.ellipsis, maxLines: 1
-                                    )
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 15.h),
-                              Row(
-                                textBaseline: TextBaseline.alphabetic,
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(YunMusicFont.love, size: 32.w, color: AppTheme.primary),
-                                  SizedBox(width: 15.w),
-                                  ...List.generate(
-                                    userPlaylistData.songs![index].ar!.length,
-                                    (arIndex) {
-                                      if(arIndex == userPlaylistData.songs![index].ar!.length - 1){
-                                        return Text('${userPlaylistData.songs![index].ar![arIndex].name}', style: TextStyle(fontSize: 36.sp,color: AppTheme.myLoveSingSubtext));
-                                      }else{
-                                        return Text('${userPlaylistData.songs![index].ar![arIndex].name} / ', style: TextStyle(fontSize: 36.sp,color: AppTheme.myLoveSingSubtext));
-                                      }
-                                    }
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 15.w),
-                                    child: Text('-', style: TextStyle(fontSize: 36.sp))
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      '${userPlaylistData.songs![index].al!.name}', 
-                                      style: TextStyle(fontSize: 36.sp,color: AppTheme.myLoveSingSubtext), overflow: TextOverflow.ellipsis)
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
-                          trailing: const Icon(Icons.more_vert_outlined),
-                        ),
-                      )
-                    else
-                      Container(
-                        margin: EdgeInsets.only(top: 120.h),
-                        child: Center(
-                          child: Text(
-                            '暂无歌曲',
-                            style: TextStyle(fontSize: 44.sp, fontWeight: FontWeight.bold, color: AppTheme.myLoveSingText),
-                          ),
-                        ),
-                      ),
+                    _buildItems()
                   ],
                 ),
               ),
