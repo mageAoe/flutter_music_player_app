@@ -51,6 +51,10 @@ class AppTheme {
   static const Color songDetailCoverBg = Color(0xFF484441); // 484441
   static const Color songDetailCoverBg2 = Color(0xFF5b5650); // 5b5650
 
+  // 进度条
+  static const Color activeTrackColor = Color(0xFF807e8b);
+  static const Color inactiveTrackColor = Color(0xFF494a5c);
+  static const Color thumbColor = Color(0xFFfffefd);
 
   // 备用色调
   static const Color primaryColor1 = Color.fromARGB(237, 252, 243, 236);
