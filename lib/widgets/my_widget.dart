@@ -6,6 +6,8 @@ import 'package:flutter_music_player_app/model/user_detail_model.dart';
 import 'package:flutter_music_player_app/views/my/song_detail_view.dart';
 import 'package:flutter_music_player_app/model/user_playlist_model.dart';
 import 'package:flutter_music_player_app/theme/my_style.dart';
+// import 'package:flutter_music_player_app/views/my/song_detail_view.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 
 
@@ -239,50 +241,81 @@ class MyLoginTopWidget extends StatelessWidget {
           fit: BoxFit.cover,
           opacity: 0.8,
           colorFilter: const ColorFilter.mode(Colors.black, BlendMode.colorDodge), // color
-          image: NetworkImage('${userDetailData.profile?.backgroundUrl}')
+          // image: NetworkImage('${userDetailData.profile?.backgroundUrl}')
+          // image: Image(
+          //   image: CachedNetworkImageProvider(
+          //   '${userDetailData.profile?.backgroundUrl}', 
+          //   cacheKey: userDetailData.profile?.backgroundUrl,
+          //   )
+          // ).image
+          image: Image(
+            image: CachedNetworkImageProvider(
+            '${userDetailData.profile?.backgroundUrl}', 
+             cacheKey: userDetailData.profile?.backgroundUrl,
+            ),
+            loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            return const Center(child: CircularProgressIndicator());
+          }).image
         )
       ),
-      child: Column(
-        children: [
-          // const TopNavBarWidget(),
-          SizedBox(height: 40.h),
-          MyAvatarWidget(avatar: userDetailData.profile?.avatarUrl),
-          SizedBox(height: 40.h),
-          Text('${userDetailData.profile?.nickname }', style: nicknameTextStyle),
-          SizedBox(height: 20.h),
-          Text('${userDetailData.profile?.signature}', style: signatureTextStyle),
-          SizedBox(height: 30.h),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                children: [
-                  Text('${userDetailData.profile?.newFollows}', style: newFollowsTextStyle),
-                  SizedBox(width: 20.w),
-                  Text('关注', style: newFollowsSubTextStyle),
-                ],
-              ),
-              Row(
-                children: [
-                  Text('${userDetailData.profile?.followeds}', style: newFollowsTextStyle),
-                  SizedBox(width: 20.w),
-                  Text('粉丝', style: newFollowsSubTextStyle),
-                ],
-              ),
-              Row(
-                children: [
-                  Text('Lv.${userDetailData.level}', style: newFollowsTextStyle),
-                  SizedBox(width: 20.w),
-                  Text('等级', style: newFollowsSubTextStyle),
-                ],
-              ),
-            ],
-          ),
-          SizedBox(height: 30.h),
-          MyActionsWidget(iconsList: iconsList)
-        ],
-      ),
+      child: MyLOginInfoWidget(userDetailData: userDetailData, iconsList: iconsList),
+    );
+  }
+}
+
+class MyLOginInfoWidget extends StatelessWidget {
+  const MyLOginInfoWidget({
+    super.key,
+    required this.userDetailData,
+    required this.iconsList,
+  });
+
+  final UserDetailModel userDetailData;
+  final List iconsList;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        // const TopNavBarWidget(),
+        SizedBox(height: 40.h),
+        MyAvatarWidget(avatar: userDetailData.profile?.avatarUrl),
+        SizedBox(height: 40.h),
+        Text('${userDetailData.profile?.nickname }', style: nicknameTextStyle),
+        SizedBox(height: 20.h),
+        Text('${userDetailData.profile?.signature}', style: signatureTextStyle),
+        SizedBox(height: 30.h),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              children: [
+                Text('${userDetailData.profile?.newFollows}', style: newFollowsTextStyle),
+                SizedBox(width: 20.w),
+                Text('关注', style: newFollowsSubTextStyle),
+              ],
+            ),
+            Row(
+              children: [
+                Text('${userDetailData.profile?.followeds}', style: newFollowsTextStyle),
+                SizedBox(width: 20.w),
+                Text('粉丝', style: newFollowsSubTextStyle),
+              ],
+            ),
+            Row(
+              children: [
+                Text('Lv.${userDetailData.level}', style: newFollowsTextStyle),
+                SizedBox(width: 20.w),
+                Text('等级', style: newFollowsSubTextStyle),
+              ],
+            ),
+          ],
+        ),
+        SizedBox(height: 30.h),
+        MyActionsWidget(iconsList: iconsList)
+      ],
     );
   }
 }
@@ -298,6 +331,22 @@ class MyLoginBottomWidget extends StatelessWidget {
   final UserDetailModel userDetailData;
   final UserPlaylistModel userPlaylistData;
 
+  void onTap(BuildContext context, Playlist e){
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) {
+        return SongDetailView(
+          id: e.id!,
+          limit: e.trackCount!,
+          coverImgUrl: e.coverImgUrl!,
+          name: e.name!,
+          nickname: e.creator?.nickname,
+          avatar: userDetailData.profile?.avatarUrl
+        );
+      }),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -312,20 +361,7 @@ class MyLoginBottomWidget extends StatelessWidget {
           return Padding(
             padding: EdgeInsets.only(top: 20.h, bottom: 20.h),
             child: InkWell(
-              onTap: (){
-                Navigator.push( 
-                  context,
-                  MaterialPageRoute(builder: (context) {
-                    return SongDetailView(
-                      id: e.id!,
-                      coverImgUrl: e.coverImgUrl!,
-                      name: e.name!,
-                      nickname: e.creator?.nickname,
-                      avatar: userDetailData.profile?.avatarUrl
-                    );
-                  }),
-                );
-              },
+              onTap: () => onTap(context, e),
               child: ListTile(
                 leading: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
