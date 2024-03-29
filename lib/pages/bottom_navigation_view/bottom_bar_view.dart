@@ -3,7 +3,8 @@ import 'dart:math' as math;
 import 'package:flutter_music_player_app/theme/app_theme.dart';
 import 'package:flutter_music_player_app/main.dart';
 import './tabIcon_data.dart';
-// import 'package:flutter_music_player_app/views/play/play_music_view.dart';
+import 'package:flutter_music_player_app/views/play/play_music_view.dart';
+import 'package:flutter_music_player_app/services/KeepAliveWrapper.dart';
 
 
 
@@ -133,13 +134,26 @@ class _BottomBarViewState extends State<BottomBarView> with TickerProviderStateM
         ),
         PlayerWidget(
           animationController: animationController, 
-          addClick: (){
-            // Navigator.push( 
-            //     context,
-            //     MaterialPageRoute(builder: (context) {
-            //       return const PlayMusicWidget();
-            //     }),
-            //   );
+          ontap: (){
+            PlayMusicWidget.gotoPlayer(context, list: [], index: 1);
+            // Navigator.of(context).push(
+            //   PageRouteBuilder(
+            //     transitionDuration: const Duration(milliseconds: 300),
+            //     pageBuilder: (ctx, anim1, anim2) {
+            //       // return FadeTransition(
+            //       //   opacity: anim1,
+            //       //   child: const PlayMusicWidget(),
+            //       // );
+            //       return SlideTransition(
+            //         position: anim1.drive(Tween<Offset>(
+            //           begin: const Offset(0, 1),
+            //           end: Offset.zero,
+            //         )),
+            //         child: PlayMusicWidget.gotoPlayer(index: 1);
+            //       );
+            //     },
+            //   ),
+            // );
           }
         ),
       ]
@@ -238,11 +252,11 @@ class PlayerWidget extends StatelessWidget {
   const PlayerWidget({
     super.key,
     required this.animationController,
-    this.addClick
+    this.ontap
   });
 
   final AnimationController? animationController;
-  final Function()? addClick;
+  final Function()? ontap;
 
   @override
   Widget build(BuildContext context) {
@@ -292,7 +306,7 @@ class PlayerWidget extends StatelessWidget {
                       splashColor: Colors.white.withOpacity(0.1),
                       highlightColor: Colors.transparent,
                       focusColor: Colors.transparent,
-                      onTap: addClick,
+                      onTap: ontap,
                       child: const Icon(
                         Icons.add,
                         color: AppTheme.white,
