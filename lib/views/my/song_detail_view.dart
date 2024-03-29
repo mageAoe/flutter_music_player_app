@@ -33,8 +33,10 @@ class SongDetailView extends StatefulWidget {
 
 class _SongDetailViewState extends State<SongDetailView> {
   
-  PlaylistTrackAllModel userPlaylistData = PlaylistTrackAllModel();
+  // PlaylistTrackAllModel userPlaylistData = PlaylistTrackAllModel();
+  List<Songs> songs = [];
   int offset = 0;
+  int limit = 100;
   bool isLoading = false;
   double safeAreaTop = 0.0;
   ScrollController scrollController = ScrollController();
@@ -48,14 +50,19 @@ class _SongDetailViewState extends State<SongDetailView> {
   // 获取歌单里面的歌曲
   checkLoginStatus() async {
     setState(() {isLoading = true;});
-    MyApi.getPlaylistTrackAll('id=${widget.id}&limit=${widget.limit}&offset=$offset').then((playlist){
+    MyApi.getPlaylistTrackAll('id=${widget.id}&limit=$limit&offset=$offset').then((playlist){
       if(playlist != null){
-        // print('playlist: $playlist');
         setState(() {
-          userPlaylistData = playlist;
+          songs.addAll(playlist.songs!);
         });
       }
-    }).whenComplete(() => setState(() {isLoading = false;}));
+    }).whenComplete((){
+      setState(() {isLoading = false;});
+      // if((offset + 1) * limit < widget.limit){
+      //   offset++;
+      //   checkLoginStatus();
+      // }
+    });
   }
 
   String getTns(List<String>? tns){
@@ -82,8 +89,21 @@ class _SongDetailViewState extends State<SongDetailView> {
 
   @override
   void initState() {
-    print('widget.id:  ${widget.id}');
     checkLoginStatus();
+    scrollController.addListener(() {
+      // print('scrollController.position.pixels${scrollController.position.pixels}');
+      // print('scrollController.position.maxScrollExtent${scrollController.position.maxScrollExtent}');
+      // 提前100像素的时候就开始请求
+      if (scrollController.position.pixels > scrollController.position.maxScrollExtent - 100) {
+        if((offset + 1) * limit < widget.limit && !isLoading){
+          setState(() {
+            offset++;
+          });
+          checkLoginStatus();
+          print('-------加载更多--------');
+        }
+      }
+    });
     super.initState();
   }
 
@@ -91,13 +111,13 @@ class _SongDetailViewState extends State<SongDetailView> {
     return Column(
       children: [
         ...List.generate(
-          userPlaylistData.songs!.length,
+          songs.length,
           (index) => ListTile(
             leading: Text('${index + 1}'), // 递增的数字
             title: InkWell(
               onTap: (){
                 // 跳转播放
-                PlayMusicWidget.gotoPlayer(context, list: userPlaylistData.songs, index: index);
+                PlayMusicWidget.gotoPlayer(context, list: songs, index: index);
               },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,7 +130,7 @@ class _SongDetailViewState extends State<SongDetailView> {
                     children: [
                       Expanded(
                         child: Text(
-                          '${userPlaylistData.songs![index].name} ${getTns(userPlaylistData.songs![index].tns)}', 
+                          '${songs[index].name} ${getTns(songs[index].tns)}', 
                           overflow: TextOverflow.ellipsis, maxLines: 1
                         )
                       ),
@@ -126,7 +146,7 @@ class _SongDetailViewState extends State<SongDetailView> {
                       Icon(YunMusicFont.love, size: 32.w, color: AppTheme.primary),
                       SizedBox(width: 15.w),
                       Expanded(
-                        child: Text(getSongName(userPlaylistData.songs![index].ar, userPlaylistData.songs![index].al!.name), 
+                        child: Text(getSongName(songs[index].ar, songs[index].al!.name), 
                           style: TextStyle(fontSize: 36.sp,color: AppTheme.myLoveSingSubtext), overflow: TextOverflow.ellipsis)
                       ),
                     ],
@@ -136,18 +156,19 @@ class _SongDetailViewState extends State<SongDetailView> {
             ),
             trailing: const Icon(Icons.more_vert_outlined),
           ),
-        )
+        ),
+        isLoading? const Center(child: CircularProgressIndicator()) : const Text('')
       ],
     );
   }
 
   Widget _buildItems(){
-    if(isLoading){
+    if(isLoading && offset == 0){
       return SizedBox(
         height: 500.h,
-        child: const Center(child: LinearProgressIndicator()));
+        child: const Center(child: CircularProgressIndicator()));
     }else{
-      if(userPlaylistData.songs != null && userPlaylistData.songs!.isNotEmpty){
+      if(songs.isNotEmpty){
         return _buildSongList();
       }else{
         return SizedBox(
@@ -278,7 +299,7 @@ class _SongDetailViewState extends State<SongDetailView> {
             Transform.translate(
               offset: const Offset(0.0, -30.0),
               child: Container(
-                padding: EdgeInsets.only(top: 40.h, bottom: 120.h),
+                padding: EdgeInsets.only(top: 40.h, bottom: 40.h),
                 decoration: const BoxDecoration(
                   color: AppTheme.myBg,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(30.0)),
@@ -290,7 +311,7 @@ class _SongDetailViewState extends State<SongDetailView> {
                       title: Row(
                         children: [
                           const Text('播放全部'),
-                          Text('${userPlaylistData.songs?.length}首')
+                          Text('${widget.limit}首')
                         ],
                       ),
                       trailing: Row(
