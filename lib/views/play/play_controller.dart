@@ -54,6 +54,7 @@ class MusicController with ChangeNotifier {
   // final audioPlayer = AudioPlayer();
   PlayList playList = PlayList();
 
+
   PlayerState? _playerState;
   StreamSubscription? _durationSubscription;
   StreamSubscription? _positionSubscription;
@@ -128,9 +129,9 @@ class MusicController with ChangeNotifier {
 
   void init() {
     audioPlayer = AudioPlayer();
-    // playList = PlayList();
+    playList = PlayList();
 
-    // _initStreams();
+    _initStreams();
   }
 
   Future play({String? path}) async {
@@ -207,14 +208,29 @@ class MusicController with ChangeNotifier {
     return playList.getCurrentSong();
   }
 
+  int getCurrentIndex() {
+    return playList.getCurrentIndex();
+  }
+
+
+  Future seek(double  millseconds) async {
+    final duration = _duration;
+    final position = millseconds * duration!.inMilliseconds;
+    await audioPlayer.seek(Duration(milliseconds: position.round()));
+    if (_playerState == PlayerState.paused) {
+      play();
+    }
+  }
+
 
 
    @override
   void dispose() {
     super.dispose();
-    // _positionSubscription.cancel();
-    // _audioPlayerStateSubscription.cancel();
-    // musicListeners.clear();
+    _positionSubscription?.cancel();
+    _playerStateChangeSubscription?.cancel();
+    musicListeners.clear();
+    print('dispose------------------------');
     audioPlayer.stop();
   }
 

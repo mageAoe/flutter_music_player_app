@@ -1,12 +1,10 @@
 import 'dart:ui';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
 import 'package:flutter_music_player_app/theme/app_theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_music_player_app/utlis/screen_size.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_music_player_app/views/play/lyric_view.dart';
 import 'package:flutter_music_player_app/views/play/widget/music_progress_bar.dart';
 import 'package:flutter_music_player_app/views/play/widget/controller_bar_.dart';
@@ -63,10 +61,10 @@ class PlayMusicWidget extends StatefulWidget {
 
 class _PlayMusicWidgetState extends State<PlayMusicWidget> with SingleTickerProviderStateMixin {
 
-  late AnimationController _animController;
+  AnimationController? _animController;
 
-  int duration = 0;
-  int position = 0; // 单位：毫秒
+  Duration? duration;
+  Duration? position; // 单位：毫秒
 
   Songs? song;
   String? songImage;
@@ -74,7 +72,7 @@ class _PlayMusicWidgetState extends State<PlayMusicWidget> with SingleTickerProv
   late int imageSize;
   late LyricViewView _lyricPage;
   bool isTaping = false; // 是否在手动拖动进度条（拖动的时候播放进度条不要自己动）
-  late PlayerState playerState;
+  PlayerState? playerState;
 
   late MusicController musicController; // 播放控制器
   late MusicListener musicListener; // 播放监听器
@@ -97,15 +95,22 @@ class _PlayMusicWidgetState extends State<PlayMusicWidget> with SingleTickerProv
     super.initState();
   }
 
+  @override
+  void dispose() {
+    print('dispose: ========');
+    super.dispose();
+  }
+
   void initMusicListener() {
     musicListener = MusicListener(
         getName: () => "PlayerPage",
         onLoading: () => _onStartLoading(),
         onStart: (duration) {
+          print("duration: $duration");
           setState(() => this.duration = duration);
         },
         onPosition: (position) {
-          //print('MusicListener in PlayerPager, position: $position, duration: $duration');
+          // print('MusicListener in PlayerPager, position: $position, duration: $duration');
           if (!isTaping) {
             // 如果手指拖动，就不通过播放器更新状态，以免抖动。
             _lyricPage.updatePosition(position);
@@ -151,7 +156,7 @@ class _PlayMusicWidgetState extends State<PlayMusicWidget> with SingleTickerProv
     // }
 
     setState(() {
-      position = 0;
+      position = const Duration(seconds : 0);
     });
 
     Future.delayed(const Duration(milliseconds: 200)).then((_) {
@@ -160,16 +165,16 @@ class _PlayMusicWidgetState extends State<PlayMusicWidget> with SingleTickerProv
   }
 
   Widget _getSongImage(BoxFit fit, {double width = 0, double height = 0}) {
-    print("songImage:----------------$songImage");
-  return songImage != null
-      ? CachedNetworkImage(
-          width: imageSize.toDouble() - width,
-          height: imageSize.toDouble() - height,
-          imageUrl: songImage!,
-          fit: fit,
-          placeholder: (context, url) => _getPlaceHolder(fit, width: width, height: height),
-        )
-      : _getPlaceHolder(fit);
+    // print("songImage:----------------$songImage");
+    return songImage != null
+        ? CachedNetworkImage(
+            width: imageSize.toDouble() - width,
+            height: imageSize.toDouble() - height,
+            imageUrl: songImage!,
+            fit: fit,
+            placeholder: (context, url) => _getPlaceHolder(fit, width: width, height: height),
+          )
+        : _getPlaceHolder(fit);
   } 
 
   Widget _getPlaceHolder(BoxFit fit, {double? width, double? height}) {
@@ -237,7 +242,7 @@ class _PlayMusicWidgetState extends State<PlayMusicWidget> with SingleTickerProv
               //设置动画的旋转中心
               alignment: Alignment.center,
               //动画控制器
-              turns: _animController,
+              turns: _animController!,
               child: Hero(
                 tag: 'FloatingPlayer',
                 // 加边框的效果
@@ -259,25 +264,25 @@ class _PlayMusicWidgetState extends State<PlayMusicWidget> with SingleTickerProv
   }
 
   void _buildAnim() {
-    if (!_animController.isAnimating) {
-        _animController.forward();
-        _animController.repeat();
+    if (!_animController!.isAnimating) {
+        _animController!.forward();
+        _animController!.repeat();
     }
     if (playerState == PlayerState.playing) {
-      if (!_animController.isAnimating) {
-        _animController.forward();
-        _animController.repeat();
+      if (!_animController!.isAnimating) {
+        _animController!.forward();
+        _animController!.repeat();
       }
     } else {
-      if (_animController.isAnimating) {
-        _animController.stop();
+      if (_animController!.isAnimating) {
+        _animController!.stop();
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // _buildAnim();
+    _buildAnim();
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -340,23 +345,24 @@ class _PlayMusicWidgetState extends State<PlayMusicWidget> with SingleTickerProv
                     child: _lyricPage, // 歌词
                   ),
                   MusicProgressBar(
-                    duration: duration,
-                    position: position,
+                    duration: duration != null? duration!.inSeconds: 0,
+                    position: position != null ? position!.inSeconds : 0,
                     onChanged: (double value) {
-                      // setState(() {
-                      //   position = value.toInt();
-                      // });
-                      // _lyricPage.updatePosition(position, isTaping: true);
+                      setState(() {
+                        position = Duration(seconds : value.toInt());
+                      });
+                      // _lyricPage.updatePosition(position!, isTaping: true);
                     },
                     onChangeStart: (double value) {
-                      // isTaping = true;
+                      isTaping = true;
                     },
                     onChangeEnd: (double value) {
-                      // isTaping = false;
-                      // musicController.seek(value);
+                      isTaping = false;
+                      musicController.seek(value);
                     }
                   ),
-                  const ControllerBarView()
+                  ControllerBarView(playerState: playerState)
+                  // const ControllerBarView()
                 ],
               ),
             )
