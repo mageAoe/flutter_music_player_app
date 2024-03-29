@@ -10,21 +10,18 @@ import 'package:flutter_music_player_app/views/play/widget/gradient_text.dart';
 
 
 class LyricViewView extends StatefulWidget {
-  bool loading = false;
   late _LyricViewViewState? _state;
   LyricViewView({Key? key}) : super(key: key);
 
   @override
   _LyricViewViewState createState() {
-    print('----------createState------------------');
     _state = _LyricViewViewState();
-    loading = true;
     return _state!;
   }
 
   int updatePositionCount = 0;
-  void updatePosition(int position, {isTaping = false}) {
-    //print('updatePosition: $position');
+  void updatePosition(Duration position, {isTaping = false}) {
+    // print('updatePosition: $position');
     if (_state == null) {
       if (updatePositionCount > 5) {
         return;
@@ -36,7 +33,7 @@ class LyricViewView extends StatefulWidget {
       });
     } else {
       updatePositionCount = 0;
-      _state?.updatePosition(position, isTaping: isTaping);
+      _state?.updatePosition(position.inMilliseconds, isTaping: isTaping);
     }
   }
 
@@ -75,7 +72,7 @@ class _LyricViewViewState extends State<LyricViewView> {
   int position = 0;
   int _currentIndex = -1;
   bool isFirst = true;
-  late GradientText currentLyricItem;
+  GradientText? currentLyricItem;
 
   late ScrollController _controller;
 
@@ -83,32 +80,9 @@ class _LyricViewViewState extends State<LyricViewView> {
   void initState() {
 
     _controller = ScrollController();
-    // _getLyric();
     super.initState();
   }
 
-  // 请求歌词
-  void _getLyric(){
-    // 开始加载
-    setState(() {
-      lyric = null;
-    });
-    print("song!.id!${song!.id!}");
-    // 获取歌词
-    PlayApi.getLyric(song!.id!).then((value){
-      // print(value);
-      lyric = value;
-      setState(() {
-        lyricData = Lyric(lyric!.lrc!.lyric!);
-      });
-      // print('lyricData: ${lyricData.items}');
-
-    }).catchError((e) {
-      setState(() {
-        success = false;
-      });
-    });
-  }
   
   void scrollTo(int index) {
     int itemSize = lyricData.items.length;
@@ -139,6 +113,7 @@ class _LyricViewViewState extends State<LyricViewView> {
       isFirst = false;
       _controller.jumpTo(topIndex * itemHeight);
     } else {
+      print('topIndex * itemHeight: ${topIndex * itemHeight}');
       _controller.animateTo(topIndex * itemHeight,
           duration: const Duration(seconds: 1), curve: Curves.easeInOut);
     }
@@ -155,7 +130,7 @@ class _LyricViewViewState extends State<LyricViewView> {
       } else {
         offsetX = 1.0;
       }
-      currentLyricItem.setOffsetX(offsetX);
+      currentLyricItem?.setOffsetX(offsetX);
     }
   }
 
@@ -163,6 +138,7 @@ class _LyricViewViewState extends State<LyricViewView> {
 
   // 根据歌曲播放的位置确定滚动的位置
   void updatePosition(int milliseconds, {isTaping = false}) {
+    // print('milliseconds$milliseconds');
     if (isItemsEmpty) {
       return;
     }
@@ -178,7 +154,7 @@ class _LyricViewViewState extends State<LyricViewView> {
     updateCurrentLyricItem();
 
     int index = getIndexByTime(position);
-    //print("update index : $_index, currentIndex: $_currentIndex");
+    print("update index : $index, currentIndex: $_currentIndex");
     if (index != _currentIndex) {
       _currentIndex = index;
       scrollTo(_currentIndex);
@@ -223,6 +199,31 @@ class _LyricViewViewState extends State<LyricViewView> {
     return index;
   }
 
+  Widget _getItem(LyricItem item) {
+    bool isCurrent = item.index == _currentIndex;
+    Widget itemText = Text(
+      item.content,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(
+          fontSize: 13.0, color: isCurrent ? Colors.white : Colors.white60),
+    );
+
+    if (isCurrent) {
+      if (islyricMask) {
+        itemText = GradientText(text: itemText);
+        currentLyricItem = itemText as GradientText?;
+      }
+    }
+
+    return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+        alignment: Alignment.center,
+        height: itemHeight,
+        child: itemText
+    );
+  }
+
   Widget _buildInfo(String msg){
     isItemsEmpty = true;
     return Center(
@@ -253,12 +254,13 @@ class _LyricViewViewState extends State<LyricViewView> {
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      alignment: Alignment.center,
-                      height: itemHeight,
-                      child: Text(lyricData.items[index].content, style: const TextStyle(color: Colors.white))
-                    );
+                    // return Container(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    //   alignment: Alignment.center,
+                    //   height: itemHeight,
+                    //   child: Text(lyricData.items[index].content, style: const TextStyle(color: Colors.white))
+                    // );
+                    return _getItem(lyricData.items[index]);
                   },
                   childCount: lyricData.items.length,
                 )
@@ -277,6 +279,29 @@ class _LyricViewViewState extends State<LyricViewView> {
         updatePosition(lastScrollPosition, isTaping: true);
         lastScrollPosition = -1;
       }
+    });
+  }
+
+    // 请求歌词
+  void _getLyric(){
+    // 开始加载
+    setState(() {
+      lyric = null;
+    });
+    print("song!.id!${song!.id!}");
+    // 获取歌词
+    PlayApi.getLyric(song!.id!).then((value){
+      // print(value);
+      lyric = value;
+      setState(() {
+        lyricData = Lyric(lyric!.lrc!.lyric!);
+      });
+      print('lyricData: ${lyricData.items}');
+
+    }).catchError((e) {
+      setState(() {
+        success = false;
+      });
     });
   }
 
