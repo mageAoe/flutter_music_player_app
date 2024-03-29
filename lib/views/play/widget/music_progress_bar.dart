@@ -34,11 +34,18 @@ class _MusicProgressBarState extends State<MusicProgressBar> {
 
   @override
   Widget build(BuildContext context) {
-    // final ThemeData theme = Theme.of(context);
+    // 坑很多：Slider注意范围越界的问题，而且duration不能为0.0
+    // 歌曲切换的时候duration可能返回0。
+    // 播放出错的时候，可能返回负数。
+    double position = widget.position < 0 ? 0.0 : widget.position.toDouble();
+    double duration = widget.duration <= 0 ? 1.0 : widget.duration.toDouble();
+    if (position > duration) {
+      position = 0;
+    }
 
     return Row(
       children: [
-        const Text('00:00',style: TextStyle(color: Colors.white, fontSize: 12)),
+        Text(_getFormatTime(position.toInt()),style: const TextStyle(color: Colors.white, fontSize: 12)),
         Expanded(
           child: SliderTheme(
             data:  const SliderThemeData(
@@ -51,26 +58,26 @@ class _MusicProgressBarState extends State<MusicProgressBar> {
             ), 
             child: Slider.adaptive(
               // value: position.toDouble(),
-              value: 0.5,
+              value: position,
               min: 0.0,
               // max: duration == 0 ? 1.0 : duration.toDouble(),
-              max: 1,
+              max: duration,
               onChanged: (double value) {
                 // setPosition(value.toInt(), byHander: true);
-                // widget.onChanged(value);
+                widget.onChanged(value);
               },
               onChangeStart: (double value) {
                 // isTaping = true;
-                // widget.onChangeStart(value);
+                widget.onChangeStart(value);
               },
-              // onChangeEnd: (double value) {
+              onChangeEnd: (double value) {
               //   isTaping = false;
-              //   widget.onChangeEnd(value);
-              // },
+                widget.onChangeEnd(value);
+              },
             ),
           )
         ),
-        const Text( '00:00', style: TextStyle(color: Colors.white, fontSize: 12)),
+        Text(_getFormatTime(duration.toInt()), style: const TextStyle(color: Colors.white, fontSize: 12)),
       ],
     );
   }

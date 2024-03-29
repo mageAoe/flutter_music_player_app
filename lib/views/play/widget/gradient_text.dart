@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 
 class GradientText extends StatefulWidget {
-  late final Text text;
+  late final Widget text;
   late final double offsetX;
   late final Color colorBg;
   late _GradientTextState _state;
   GradientText({super.key, required this.text, this.offsetX = 0.0, this.colorBg = Colors.white});
 
-  // @override
-  // _GradientTextState createState() {
-  //   _state = _GradientTextState();
-  //   return _state;
-  // }
   @override
-  _GradientTextState createState() => _GradientTextState();
+  _GradientTextState createState() {
+    _state = _GradientTextState();
+    return _state;
+  }
+  // _GradientTextState createState() => _GradientTextState();
 
   int retryCount = 0;
   void setOffsetX(double offsetX) {
@@ -51,9 +50,6 @@ class _GradientTextState extends State<GradientText> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.text.data!.isEmpty) {
-      return widget.text;
-    }
 
     const Gradient gradient = LinearGradient(
         colors: [

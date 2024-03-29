@@ -3,12 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_music_player_app/views/play/widget/icon_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_music_player_app/utlis/fonts.dart';
+import 'package:flutter_music_player_app/views/play/widget/current_play_list.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 
 
 
 class ControllerBarView extends StatefulWidget {
-  const ControllerBarView({super.key});
+  // final bool isGoingPlaying;
+  final PlayerState? playerState;
+  const ControllerBarView({super.key, this.playerState});
+  // const ControllerBarView({super.key});
+
 
   @override
   State<ControllerBarView> createState() => _ControllerBarViewState();
@@ -16,7 +22,11 @@ class ControllerBarView extends StatefulWidget {
 
 class _ControllerBarViewState extends State<ControllerBarView> {
 
-
+  // 将要播放和正在播放，用于播放按钮的状态控制。
+  // 中途切歌会调用一下stoppted
+  // bool isGoingPlaying() {
+  //   return widget.playerState != PlayerState.paused;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +54,8 @@ class _ControllerBarViewState extends State<ControllerBarView> {
               },
             ),
             MyIconButton(
-              icon: Icons.play_circle_fill,
+              icons: const [Icons.pause, Icons.play_arrow],
+              // iconIndex: isGoingPlaying() ? 0 : 1,
               size: 140.w,
               color: const Color(0xFFebebed),
               onPressed: (){},
@@ -57,7 +68,16 @@ class _ControllerBarViewState extends State<ControllerBarView> {
             MyIconButton(
               icon: YunMusicFont.playList,
               size: 70.w,
-              onPressed: (){},
+              animEnable: false,
+              onPressed: (){
+                showModalBottomSheet(
+                  context: context,
+                  backgroundColor: Colors.transparent,
+                    builder: (BuildContext context) {
+                      return const CurrentPlayList();
+                  }
+                );
+              },
             )
           ],
         )
