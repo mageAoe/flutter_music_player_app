@@ -55,7 +55,7 @@ class MusicController with ChangeNotifier {
   PlayList playList = PlayList();
 
 
-  PlayerState? _playerState;
+  PlayerState _playerState = PlayerState.completed;
   StreamSubscription? _durationSubscription;
   StreamSubscription? _positionSubscription;
   StreamSubscription? _playerCompleteSubscription;
@@ -123,7 +123,22 @@ class MusicController with ChangeNotifier {
         });
         notifyMusicListeners((listener) => listener.onStart(_duration));
         print("AudioPlayer start, duration:$_duration");
+      } else if (state == PlayerState.paused) {
+        _playerState = PlayerState.paused;
+      }else if(state == PlayerState.stopped){
+        _position = Duration.zero;
+        _playerState = PlayerState.stopped;
+      }else if (state == PlayerState.completed) {
+        _position = Duration.zero;
+        _playerState = PlayerState.completed;
+        print('播放结束');
+        onComplete();
       }
+      notifyMusicListeners((listener) => listener.onStateChanged(_playerState));
+      print("AudioPlayer onPlayerStateChanged: $_playerState");
+    }, onError: (msg){
+      notifyMusicListeners((listener) => listener.onError(msg));
+      print("AudioPlayer onError: $msg");
     });
   }
 
@@ -163,8 +178,9 @@ class MusicController with ChangeNotifier {
         // 本地音乐
         await audioPlayer.play(UrlSource(url!));
       }else{
-        String newUrl =  await HttpClient.getRedirectedUrl(url!);
-        await audioPlayer.play(UrlSource(newUrl));
+        // String newUrl =  await HttpClient.getRedirectedUrl(url!);
+        // print('newUrl: $newUrl');
+        await audioPlayer.play(UrlSource(url!));
       }
     }
   }
@@ -180,6 +196,7 @@ class MusicController with ChangeNotifier {
     notifyListeners();
   }
 
+  // 开始播放歌曲
   Future startSong() async {
     Songs? newSong = getCurrentSong();
     // if (newSong == null) {
@@ -200,6 +217,7 @@ class MusicController with ChangeNotifier {
     } else {  // 如果是播放新歌，就重新获取播放地址。
       SongUtil.getPlayPath(song!).then((playPath) {
         play(path: playPath);
+        // print(' playPath: $playPath');
       });
     }
   }
@@ -212,6 +230,32 @@ class MusicController with ChangeNotifier {
     return playList.getCurrentIndex();
   }
 
+  PlayerState getCurrentState() {
+    return _playerState;
+    // return PlayerState.paused;
+  }
+
+  int getPosition() {
+    return _position!.inMilliseconds;
+  }
+
+  Future pause() async {
+    saveHistory();
+    await audioPlayer.pause();
+  }
+
+  Future stop() async {
+    await audioPlayer.stop();
+  }
+
+  // 播放或暂停
+  Future toggle() async {
+    if (_playerState == PlayerState.playing) {
+      await pause();
+    } else {
+      await play();
+    }
+  }
 
   Future seek(double  millseconds) async {
     final duration = _duration;
@@ -222,6 +266,57 @@ class MusicController with ChangeNotifier {
     }
   }
 
+  // 上一首
+  Songs next() {
+    saveHistory();
+    Songs item;
+    if (playList.cycleType == CycleType.random) {
+      item = playList.randomNext()!;
+    } else{
+      item = playList.next()!;
+    }
+    
+    startSong();
+    return item;
+  }
+
+  // 下一首
+  Songs previous() {
+    saveHistory();
+    Songs item;
+    if (playList.cycleType == CycleType.random) {
+      item = playList.randomNext()!;
+    } else{
+      item = playList.previous()!;
+    }
+    
+    startSong();
+    return item;
+  }
+
+  // 播放完成
+  void onComplete() {
+    Songs nextSong;
+    // 如果单曲循环，就还是当前歌曲。
+    if (playList.cycleType == CycleType.one) {
+      nextSong = getCurrentSong()!;
+      startSong();
+    } else {
+      nextSong = next();
+    }
+    if (nextSong == null) {
+      notifyMusicListeners((listener) => listener.onStateChanged(PlayerState.stopped));
+    }
+    notifyListeners();
+  }
+
+  void saveHistory() {
+    // 将上一首保存到历史记录
+    // print("saveHistory, 当前歌曲播放时长：${position~/1000}");
+    // if (position > 30*1000) { // 超过30秒才保存
+    //   HistoryDB().addHistory(this.song);
+    // }
+  }
 
 
    @override
@@ -230,7 +325,7 @@ class MusicController with ChangeNotifier {
     _positionSubscription?.cancel();
     _playerStateChangeSubscription?.cancel();
     musicListeners.clear();
-    print('dispose------------------------');
+    // print('dispose------------------------');
     audioPlayer.stop();
   }
 

@@ -45,18 +45,20 @@ class _MyIconButtonState extends State<MyIconButton> with SingleTickerProviderSt
 
     animation = Tween(begin: 0.0, end: 1.0).animate(_controller);
     animation.addStatusListener((status) {
+      print('status $status');
       if (status == AnimationStatus.completed) {
         // 如果只有一张图，不需要动画
-        if (widget.icons!.length > 1) {
-          int nextIndex = 0;
-          if (iconIndex != widget.iconIndex) {
-            nextIndex = widget.iconIndex;
+        print('status ${widget.icons}');
+        if(widget.icons != null){
+          if (widget.icons!.length > 1) {
+            int nextIndex = 0;
+            if (iconIndex != widget.iconIndex) {
+              nextIndex = widget.iconIndex;
+            }
+            setState(() {
+              iconIndex = nextIndex;
+            });
           }
-          setState(() {
-            iconIndex = nextIndex;
-          });
-
-          //print('Anim completed, iconIndex: $iconIndex ');
         }
         //动画执行结束时反向执行动画
         _controller.reverse();

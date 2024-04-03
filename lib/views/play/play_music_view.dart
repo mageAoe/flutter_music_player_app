@@ -97,7 +97,8 @@ class _PlayMusicWidgetState extends State<PlayMusicWidget> with SingleTickerProv
 
   @override
   void dispose() {
-    print('dispose: ========');
+    _animController?.dispose();
+    musicController.removeMusicListener(musicListener);
     super.dispose();
   }
 
@@ -177,11 +178,11 @@ class _PlayMusicWidgetState extends State<PlayMusicWidget> with SingleTickerProv
         : _getPlaceHolder(fit);
   } 
 
-  Widget _getPlaceHolder(BoxFit fit, {double? width, double? height}) {
+  Widget _getPlaceHolder(BoxFit fit, {double width = 0, double height = 0}) {
     return Image.asset(
       'assets/images/music_bg.jpg',
-      width: imageSize.toDouble() - width!,
-      height: imageSize.toDouble() - height!,
+      width: imageSize.toDouble() - width,
+      height: imageSize.toDouble() - height,
       fit: fit,
     );
   }
@@ -351,7 +352,7 @@ class _PlayMusicWidgetState extends State<PlayMusicWidget> with SingleTickerProv
                       setState(() {
                         position = Duration(seconds : value.toInt());
                       });
-                      // _lyricPage.updatePosition(position!, isTaping: true);
+                      _lyricPage.updatePosition(position!, isTaping: true);
                     },
                     onChangeStart: (double value) {
                       isTaping = true;
@@ -361,7 +362,7 @@ class _PlayMusicWidgetState extends State<PlayMusicWidget> with SingleTickerProv
                       musicController.seek(value);
                     }
                   ),
-                  ControllerBarView(playerState: playerState)
+                  ControllerBarView(playerState: playerState, musicController: musicController)
                   // const ControllerBarView()
                 ],
               ),

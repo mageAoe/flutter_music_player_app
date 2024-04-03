@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_music_player_app/model/Lyric_model.dart';
 import 'package:flutter_music_player_app/api/play_api.dart';
 import 'package:flutter_music_player_app/model/playlist_track_all_model.dart';
-import './lyric_controller.dart';
+import 'package:flutter_music_player_app/views/play/lyric_controller.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_music_player_app/views/play/widget/gradient_text.dart';
 
@@ -154,7 +154,7 @@ class _LyricViewViewState extends State<LyricViewView> {
     updateCurrentLyricItem();
 
     int index = getIndexByTime(position);
-    print("update index : $index, currentIndex: $_currentIndex");
+    // print("update index : $index, currentIndex: $_currentIndex");
     if (index != _currentIndex) {
       _currentIndex = index;
       scrollTo(_currentIndex);
@@ -296,8 +296,7 @@ class _LyricViewViewState extends State<LyricViewView> {
       setState(() {
         lyricData = Lyric(lyric!.lrc!.lyric!);
       });
-      print('lyricData: ${lyricData.items}');
-
+      // print('lyricData: ${lyricData.items}');
     }).catchError((e) {
       setState(() {
         success = false;
