@@ -1,6 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:dio/dio.dart';
 
 
 
@@ -35,6 +36,8 @@ class _PlayMusicWidgetState extends State<PlayMusicWidget> {
 
   bool loading = false;
 
+  final dio = Dio();
+
   // 开始播放
   Future<void> _play() async {
     // 预加载音频
@@ -57,8 +60,27 @@ class _PlayMusicWidgetState extends State<PlayMusicWidget> {
     // http://m801.music.126.net/20240312145139/210b76821d2785ec9900e419fcdafdee/jdymusic/obj/wo3DlMOGwrbDjj7DisKw/32712176702/f143/05e6/0754/4c6dbf4bd258b6653ceec125e5903bc0.mp3
     // 需要将http 替换成https
 
-    await audioPlayer.play(UrlSource("https://luan.xyz/files/audio/ambient_c_motion.mp3"));
-    setState(() => _playerState = PlayerState.playing );
+    try {
+      Response response = await dio.head("https://music.163.com/song/media/outer/url?id=414118654.mp3");
+      if (response.isRedirect == true) {
+        String redirectedUrl = response.realUri.toString();
+        print("重定向后的地址：$redirectedUrl");
+        String url2 = redirectedUrl.replaceAll('http', 'https');
+        print(url2);
+        // 在这里调用 audioPlayer.play 方法并传递重定向后的地址
+        await audioPlayer.play(UrlSource(url2));
+      } else {
+        print("没有发生重定向");
+        // 在这里调用 audioPlayer.play 方法并传递原始地址
+        await audioPlayer.play(UrlSource("https://music.163.com/song/media/outer/url?id=414118654.mp3"));
+      }
+    } catch (e) {
+      print("发生错误：$e");
+    }
+
+    // await audioPlayer.play(UrlSource("https://m10.music.126.net/20240319144810/0d15d4737f0bfd9e526e14ebbf83ca97/ymusic/4400/7d10/9faf/77fbae5cc3ab021e3606ed4a1b808b01.mp3"));
+    // await audioPlayer.play(UrlSource("https://music.163.com/song/media/outer/url?id=414118654.mp3"));
+    // setState(() => _playerState = PlayerState.playing );
 
     // audioPlayer.setAudioContext(ctx)
   }
@@ -198,3 +220,63 @@ class _PlayMusicWidgetState extends State<PlayMusicWidget> {
     );
   }
 }
+
+
+
+// child: const Column(
+//           mainAxisSize: MainAxisSize.min,
+//           children: <Widget>[
+            
+//             Row(
+//               mainAxisSize: MainAxisSize.min,
+//               children: [
+//                 IconButton(
+//                   key: const Key('play_button'),
+//                   onPressed: (){},
+//                   iconSize: 48.0,
+//                   icon: const Icon(Icons.play_arrow),
+//                   color: color,
+//                 ),
+//                 IconButton(
+//                   key: const Key('pause_button'),
+//                   onPressed: (){},
+//                   iconSize: 48.0,
+//                   icon: const Icon(Icons.pause),
+//                   color: color,
+//                 ),
+//                 IconButton(
+//                   key: const Key('stop_button'),
+//                   onPressed: (){},
+//                   iconSize: 48.0,
+//                   icon: const Icon(Icons.stop),
+//                   color: color,
+//                 ),
+//               ],
+//             ),
+//             Slider(
+//               onChanged: (value) {
+//                 final duration = _duration;
+//                 if (duration == null) {
+//                   return;
+//                 }
+//                 final position = value * duration.inMilliseconds;
+//                 // 跳转到指定位置
+//                 audioPlayer.seek(Duration(milliseconds: position.round()));
+//               },
+//               value: (_position != null &&
+//                       _duration != null &&
+//                       _position!.inMilliseconds > 0 &&
+//                       _position!.inMilliseconds < _duration!.inMilliseconds)
+//                   ? _position!.inMilliseconds / _duration!.inMilliseconds
+//                   : 0.0,
+//             ),
+//             Text(
+//               _position != null
+//                   ? '$_positionText / $_durationText'
+//                   : _duration != null
+//                       ? _durationText
+//                       : '',
+//               style: const TextStyle(fontSize: 16.0),
+//             ),
+//           ],
+//         ),
