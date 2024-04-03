@@ -59,7 +59,7 @@ class _SongSheetViewState extends State<SongSheetView> with TickerProviderStateM
             backgroundColor: AppTheme.myBg,
             title: playlistHot.tags == null || playlistHot.tags!.isEmpty 
             ? const Center(
-              child: Text('1211')
+              child: Text('')
               )
             : SizedBox(
               height: 65.h,
