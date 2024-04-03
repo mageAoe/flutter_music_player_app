@@ -31,6 +31,18 @@ class Api {
   static String URL_MV_URL = 'mv/url'; // mv/url?id=10896407&r=1080 `r`: 分辨率,默认 1080
   // mv 排行
   static String URL_TOP_MV = 'top/mv'; // top/mv?limit=10&offset=1
+  // 获取歌手 mv
+  static String URL_ARTIST_MV = 'artist/mv'; // artist/mv?id=6452
+  // 全部 mv
+  // area: 地区,可选值为全部,内地,港台,欧美,日本,韩国,不填则为全部
+  // order: 排序,可选值为上升最快,最热,最新,不填则为上升最快
+  // limit: 取出数量 , 默认为 30
+  // offset: 偏移数量 , 用于分页 , 如 :( 页数 -1)*50, 其中 50 为 limit 的值 , 默认 为 0
+  static String URL_MV_All = 'mv/all'; // mv/all?area=港台
+  // 最新 mv
+  static String URL_MV_FIRST = 'mv/first'; // mv/first?limit=10
+  // 网易出品 mv
+  static String URL_MV_EXCLUSIVE_RCMD = 'mv/exclusive/rcmd'; // mv/exclusive/rcmd?limit=10
   // 歌手榜 分类  可获取排行榜中的歌手榜 前100
   // type : 地区
   //     1: 华语
