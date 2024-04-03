@@ -96,7 +96,7 @@ class Playlists {
   bool? ordered;
   bool? anonimous;
   int? coverStatus;
-  String? recommendInfo;
+  RecommendInfo? recommendInfo;
   String? socialPlaylistCover;
   String? recommendText;
   List<String>? coverText;
@@ -255,6 +255,21 @@ class Creator {
   }
 
 }
+
+class RecommendInfo{
+  RecommendInfo({
+    this.alg,
+    this.logInfo
+  });
+  String? alg;
+  String? logInfo;
+
+  RecommendInfo.fromJson(Map<String, dynamic> json){
+    alg = json['alg'];
+    logInfo = json['logInfo'];
+  }
+}
+
 
 class AvatarDetail {
   AvatarDetail({
