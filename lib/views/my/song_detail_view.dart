@@ -144,6 +144,7 @@ class _SongDetailViewState extends State<SongDetailView> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Icon(YunMusicFont.love, size: 32.w, color: AppTheme.primary),
+                      songs[index].fee == 1 ? Icon(YunMusicFont.vip, size: 52.w, color: AppTheme.primary):const Text(''),
                       SizedBox(width: 15.w),
                       Expanded(
                         child: Text(getSongName(songs[index].ar, songs[index].al!.name), 
