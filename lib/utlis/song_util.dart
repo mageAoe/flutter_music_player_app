@@ -1,5 +1,7 @@
 import 'package:flutter_music_player_app/utlis/file_util.dart';
 import 'package:flutter_music_player_app/model/playlist_track_all_model.dart';
+import 'package:flutter_music_player_app/api/play_api.dart';
+
 
 
 
@@ -15,7 +17,10 @@ class SongUtil{
     if (await FileUtil.isFileExists(localPath)) {
       return localPath;
     } else {
-      return getSongUrl(song.id!);
+      String? url = await PlayApi.getSongUrl('id=${song.id}');
+      String replaceUrl = url!.replaceAll('http', 'https');
+      return replaceUrl;
+      // return getSongUrl(song.id!);
     }
   }
 

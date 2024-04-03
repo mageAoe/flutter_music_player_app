@@ -4,6 +4,8 @@ import 'package:flutter_music_player_app/model/Lyric_model.dart';
 import 'package:flutter_music_player_app/services/httpClient.dart';
 import 'package:flutter_music_player_app/utlis/file_util.dart';
 import 'package:flutter_music_player_app/services/api.dart';
+import 'package:flutter_music_player_app/model/song_url_model.dart';
+
 
 
 class PlayApi {
@@ -45,6 +47,22 @@ class PlayApi {
       }
     } catch (e) {
       print('$e');
+      return null;
+    }
+  }
+
+    // 根据id获取歌曲播放地址
+  static Future<String?> getSongUrl(String query) async {
+    var res = await _httpClient.getJsonData(
+      Api.URL_PLAY_URL,
+      useCache: false, 
+      checkCacheTimeout: false,
+      query: query,
+    );
+    if(res != null){
+      SongUrlModel song = SongUrlModel.fromJson(res);
+      return song.data![0].url;
+    }else{
       return null;
     }
   }
