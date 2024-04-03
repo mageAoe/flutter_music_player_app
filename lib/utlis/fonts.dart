@@ -210,4 +210,11 @@ class YunMusicFont {
     fontFamily: 'yunMusic',
     matchTextDirection : true
   );
+
+  // VIP
+  static const IconData vip = IconData(
+    0xe664,
+    fontFamily: 'yunMusic',
+    matchTextDirection : true
+  );
 }

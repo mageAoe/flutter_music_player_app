@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1443691",
+      "name": "vip",
+      "font_class": "vip",
+      "unicode": "e65e",
+      "unicode_decimal": 58974
+    },
+    {
+      "icon_id": "11349319",
+      "name": "tipvip",
+      "font_class": "tipvip",
+      "unicode": "e664",
+      "unicode_decimal": 58980
+    },
+    {
       "icon_id": "1646226",
       "name": "分享",
       "font_class": "fenxiang",
