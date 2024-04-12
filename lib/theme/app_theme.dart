@@ -62,7 +62,8 @@ class AppTheme {
 }
 
 ThemeData appMusicTheme = ThemeData(
-  colorScheme: ColorScheme.fromSeed(seedColor: AppTheme.myLogoBgBtn),
+  colorScheme: ColorScheme.fromSeed(seedColor: AppTheme.primary),
+  focusColor: AppTheme.primary,
 );
 
 
