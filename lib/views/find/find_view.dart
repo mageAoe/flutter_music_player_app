@@ -6,7 +6,10 @@ import 'package:flutter_music_player_app/model/banners_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_music_player_app/theme/public_style.dart';
 import 'package:flutter_music_player_app/utlis/fonts.dart';
-import 'package:flutter_music_player_app/services/KeepAliveWrapper.dart';
+import 'package:flutter_music_player_app/views/singer/singer_view.dart';
+import 'package:flutter_music_player_app/views/search/search_view.dart';
+
+
 
 class FindView extends StatefulWidget {
   const FindView({ super.key });
@@ -25,6 +28,8 @@ class _FindViewState extends State<FindView> {
     {'title': '歌手', 'icon': const Icon(YunMusicFont.geshou, color: AppTheme.primary, size: 30)},
     {'title': '历史', 'icon': const Icon(Icons.history_rounded, color: AppTheme.primary, size: 30)},
   ];
+
+  List<Widget> pageList = [const SingerView(), const SingerView(),const SingerView(), const SingerView()];
 
    @override
   void initState() {
@@ -62,7 +67,11 @@ class _FindViewState extends State<FindView> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Icon(Icons.menu, color: Colors.white),
-                        const SearchWidget(),
+                        SearchWidget(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const SearchView()));
+                          },
+                        ),
                         IconButton(onPressed: (){}, icon: const Icon(Icons.mic, size: 30, color: Colors.white))
                       ],
                     ),
@@ -82,7 +91,10 @@ class _FindViewState extends State<FindView> {
                   SliverToBoxAdapter(
                     child: SizedBox(height: 30.h),
                   ),
-                  CategoryWidget(menuList: menuList)
+                  CategoryWidget(
+                    menuList: menuList,
+                    pageList: pageList,
+                  )
                   // 其他 Sliver 类型的小部件可以继续添加
                 ],
               ),

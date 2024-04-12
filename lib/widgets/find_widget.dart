@@ -103,8 +103,10 @@ class CategoryWidget extends StatelessWidget {
   const CategoryWidget({
     super.key,
     required this.menuList,
+    required this.pageList
   });
 
+  final List<Widget> pageList;
   final List menuList;
 
   @override
@@ -116,16 +118,21 @@ class CategoryWidget extends StatelessWidget {
       ),
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          return Column(
-            children: [
-              Container(
-                alignment: Alignment.center,
-                width: 120.w,
-                height: 120.w,
-                child: menuList[index]['icon'],
-              ),
-              Text(menuList[index]['title'], style: const TextStyle(color: Colors.black87)),
-            ],
+          return InkWell(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => pageList[index]));
+            },
+            child: Column(
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  width: 120.w,
+                  height: 120.w,
+                  child: menuList[index]['icon'],
+                ),
+                Text(menuList[index]['title'], style: const TextStyle(color: Colors.black87)),
+              ],
+            ),
           );
         },
         childCount: menuList.length,
