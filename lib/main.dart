@@ -22,6 +22,10 @@ void main() {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   // 初始化
   WidgetsFlutterBinding.ensureInitialized();
+
+  // 图片缓存
+  PaintingBinding.instance.imageCache.maximumSize = 10000;
+  PaintingBinding.instance.imageCache.maximumSizeBytes = 300 << 20;
   runApp(_buildProvider());
 }
 
