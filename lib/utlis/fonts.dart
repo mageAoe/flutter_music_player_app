@@ -217,4 +217,18 @@ class YunMusicFont {
     fontFamily: 'yunMusic',
     matchTextDirection : true
   );
+
+  // icf_full_screen_arrow
+  static const IconData fullScreen = IconData(
+    0xe765,
+    fontFamily: 'yunMusic',
+    matchTextDirection : true
+  );
+
+  // icon-full-screen-exit
+  static const IconData fullScreenExit = IconData(
+    0xe66e,
+    fontFamily: 'yunMusic',
+    matchTextDirection : true
+  );
 }
