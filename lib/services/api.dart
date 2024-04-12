@@ -43,6 +43,8 @@ class Api {
   static String URL_MV_FIRST = 'mv/first'; // mv/first?limit=10
   // 网易出品 mv
   static String URL_MV_EXCLUSIVE_RCMD = 'mv/exclusive/rcmd'; // mv/exclusive/rcmd?limit=10
+  // 相似 mv
+  static String URL_SIMI_MV = 'simi/mv'; // simi/mv?mvid=5436712
   // 歌手榜 分类  可获取排行榜中的歌手榜 前100
   // type : 地区
   //     1: 华语
@@ -76,9 +78,11 @@ class Api {
   // 精品歌单标签列表 
   static String URL_PLAYLIST_HIGHQUALITY = 'playlist/highquality/tags'; //  playlist/highquality/tags
   // 搜索
-  static const URL_SEARCH = 'search'; // keywords=
+  static const URL_SEARCH = 'search'; // keywords=海阔天空
   // 获取播放地址
   static const URL_PLAY_URL = 'song/url'; // id=2116253260
   // 获取歌词
   static const URL_LYRIC = 'lyric'; // id=2116253260
+  // 热搜列表(详细)
+  static const URL_SEARCH_HOT_DETAIL = 'search/hot/detail';
 }
