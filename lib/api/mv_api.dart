@@ -1,8 +1,8 @@
 import 'package:flutter_music_player_app/services/httpClient.dart';
 import 'package:flutter_music_player_app/services/api.dart';
-import 'package:flutter_music_player_app/model/playlist_hot_model.dart';
-import 'package:flutter_music_player_app/model/top_playlist_model.dart';
 import 'package:flutter_music_player_app/model/mv_exclusive_rcmd_model.dart';
+import 'package:flutter_music_player_app/model/mv_url_model.dart';
+
 
 
 
@@ -68,6 +68,22 @@ class MVApi {
     if(res != null){
       MvExclusiveRcmdModel mvList = MvExclusiveRcmdModel.fromJson(res);
       return mvList;
+    }else{
+      return null;
+    }
+  }
+
+  // 请求地址
+    static Future<MvUrlModel?> getMvUrl(String query) async {
+    var res = await _httpClient.getJsonData(
+      Api.URL_MV_URL, 
+      useCache: true,
+      checkCacheTimeout: true,
+      query: query
+    );
+    if(res != null){
+      MvUrlModel mv = MvUrlModel.fromJson(res);
+      return mv;
     }else{
       return null;
     }
