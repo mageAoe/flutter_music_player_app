@@ -2,11 +2,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 import './play_list_model.dart';
 import 'package:flutter_music_player_app/utlis/song_util.dart';
 import 'package:flutter_music_player_app/model/playlist_track_all_model.dart';
-import 'package:flutter_music_player_app/services/httpClient.dart';
+// import 'package:flutter_music_player_app/services/httpClient.dart';
 
 
 
