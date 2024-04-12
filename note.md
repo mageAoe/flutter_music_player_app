@@ -1,11 +1,18 @@
 # flutter_music_player_app
 
+### andriod
+
+```
+compileSdkVersion flutter.compileSdkVersion
+```
+
 ### 插件
 
 - 网络请求：dio
 - 图片缓存cached_network_image(实现图片持久化到本地，Flutter默认缓存到内存，但不持久化)
 - 音乐播放：audioplayer
 - 视频播放：video_player (底层原理是各平台实现对应播放器，例如Android端使用EXOPlayer)
+- appinio_video_player
 - 网络连接检测：connectivity_plus
 - 横竖屏切换：orientation
 - 屏幕适配方案： flutter_screenutil（适配文字大小、padding、margin）
