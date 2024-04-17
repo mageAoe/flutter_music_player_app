@@ -4,7 +4,6 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter_music_player_app/theme/app_theme.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_music_player_app/widgets/mv_widget.dart';
 import 'package:flutter_music_player_app/api/mv_api.dart';
 import 'package:flutter_music_player_app/model/mv_exclusive_rcmd_model.dart';
@@ -70,6 +69,7 @@ class _RefreshPageState extends State<RefreshPage> {
   // 官方
   Future<MvExclusiveRcmdModel?> getMvExclusiveRcmd() async {
     MvExclusiveRcmdModel? mvList = await MVApi.getMvExclusiveRcmd('limit=30&offset=$_pageIndex');
+    // print('===========complate==========');
     if(mvList != null){
       return mvList;
     }
@@ -106,7 +106,6 @@ class _RefreshPageState extends State<RefreshPage> {
 
   // ListView 到底 ，触发加载更多
   Future _getMoreData() async {
-    print("上拉加载更多,或者第一次加载");
     if (!isLoading) {
       // 如果上一次异步请求数据完成 同时有数据可以加载
       if (mounted) {
