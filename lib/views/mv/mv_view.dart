@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_music_player_app/theme/app_theme.dart';
 import 'package:flutter_music_player_app/views/mv/mv_data.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_music_player_app/model/mv_exclusive_rcmd_model.dart';
 import 'package:flutter_music_player_app/views/mv/refresh/refresh_page.dart';
 
 
@@ -32,7 +31,7 @@ class _MvViewState extends State<MvView> with TickerProviderStateMixin {
     _tabController = TabController(length: tabIconsList.length, vsync: this);
     _tabController.addListener(() {
       if(_tabController.animation!.value == _tabController.index){
-        print('tabController.index:  ${_tabController.index}');
+        // print('tabController.index:  ${_tabController.index}');
       }
     });
     super.initState();

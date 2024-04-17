@@ -39,17 +39,32 @@ class _MvPlayViewState extends State<MvPlayView> {
     //     Navigator.pop(context);
     //   }
     // });
-
+  print('-------------_initVideo-------------');
     _initVideo();
   }
 
   _initVideo() async {
-    _videoPlayerController =
-      VideoPlayerController.networkUrl(
-        Uri.parse('http://[240e:324:9c02:dda7:384e:fd93:3062:47f]:2280/qn-wYSHdC8tcKSZLNho5DWYuMVYtWjsUJSk2XG0aLw4.vodkgeyttp8.vod.126.net/cloudmusic/JSJiMiQgIiQkYCIiMDAwIQ==/mv/142002/5e87dc1537cf8805e20906a1b388431d.mp4?wsSecret=d6c3160b89972b32910d0d3459257f57&wsTime=1712655772')
-        ,
-        videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
-    );
+    String playAdmin = 'https://720930786.hiecheimaetu.com:22443/qn-FfSu22hyxKSZLNho5DWYuMVYtWjsUJSk2XG0aLw4.vodkgeyttp8.vod.126.net';
+    // _videoPlayerController =
+    //   VideoPlayerController.networkUrl(
+    //     Uri.parse('http://42.80.41.235:2280/qn-FfSu22hyxKSZLNho5DWYuMVYtWjsUJSk2XG0aLw4.vodkgeyttp8.vod.126.net/cloudmusic/3793/core/de43/72e551775eb78bfc7033e98894efa881.mp4?wsSecret=f9c5b8077d6d1f65b605b5e31bcae665&wsTime=1712906993')
+    //     ,
+    //     videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+    // );
+
+    // _videoPlayerController = VideoPlayerController.asset('assets/images/11.mp4');
+    // String url = 'https://devfs.369zhy.com/videos/2024-01-10/1724614249327906817_1704866603182247357.mp4';
+    String url = 'https://720930786.hiecheimaetu.com:22443/qn-FfSu22hyxKSZLNho5DWYuMVYtWjsUJSk2XG0aLw4.vodkgeyttp8.vod.126.net/cloudmusic/3793/core/de43/72e551775eb78bfc7033e98894efa881.mp4?wsSecret=f9c5b8077d6d1f65b605b5e31bcae665&wsTime=1712906993';
+    
+
+    _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(url));
+
+    _videoPlayerController.setLooping(true);
+    // _videoPlayerController.addListener(() {
+    //   print('addListener');
+    // });
+
+
 
     _chewieController = ChewieController(
       videoPlayerController: _videoPlayerController,
@@ -85,27 +100,28 @@ class _MvPlayViewState extends State<MvPlayView> {
         },
         children: [
           Center(
-            // child: FutureBuilder<bool>(
-            //   future: started(),
-            //   builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-            //     if (snapshot.data ?? false) {
-            //       return AspectRatio(
-            //         aspectRatio: _videoPlayerController.value.aspectRatio,
-            //         child: VideoPlayer(_videoPlayerController),
-            //       );
-            //     } else {
-            //       return const CircularProgressIndicator();
-            //     }
-            //   },
-            // ),
-            child: SizedBox(
-              child: AspectRatio(
-                aspectRatio: 16 / 9,
-                child: Chewie(
-                  controller: _chewieController,
-                ),
-              ),
+            child: FutureBuilder<bool>(
+              future: started(),
+              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                if (snapshot.data ?? false) {
+                  return AspectRatio(
+                    aspectRatio: _videoPlayerController.value.aspectRatio,
+                    child: VideoPlayer(_videoPlayerController),
+                  );
+                } else {
+                  // return const CircularProgressIndicator();
+                  return const Text('loading.....');
+                }
+              },
             ),
+            // child: SizedBox(
+            //   child: AspectRatio(
+            //     aspectRatio: 16 / 9,
+            //     child: Chewie(
+            //       controller: _chewieController,
+            //     ),
+            //   ),
+            // ),
           ),
         ],
       ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:chewie/chewie.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_music_player_app/utlis/fonts.dart';
 import 'package:video_player/video_player.dart';
@@ -23,27 +22,31 @@ class MvPlayView extends StatefulWidget {
 
 class _MvPlayViewState extends State<MvPlayView> {
 
-  late ChewieController _chewieController;
+  // late ChewieController _chewieController;
   VideoPlayerController? _videoPlayerController;
   List<Widget> list = [];
   bool startedPlaying = false;
 
 
   int position = 0;
+  double safeAreaTop = 0.0;
   bool isTaping = false; // 是否在手动拖动（拖动的时候进度条不要自己动
   late VideoState _playerState = VideoState.idle;
   late final VoidCallback videoListener;
 
+  bool isNetError = false;
+  bool isHide = false; // 隐藏进度条与头部
   bool isFullScreen = true;
+  String playAdmin = 'https://720930786.hiecheimaetu.com:22443/qn-FfSu22hyxKSZLNho5DWYuMVYtWjsUJSk2XG0aLw4.vodkgeyttp8.vod.126.net';
 
   @override
   void initState() {
     super.initState();
-    // _play();
-    _videoPlayerController = VideoPlayerController.networkUrl(
-      Uri.parse('http://59.48.102.3:2280/qn-HtkSySDcbKSZLNho5DWYuMVYtWjsUJSk2XG0aLw4.vodkgeyttp8.vod.126.net/cloudmusic/3793/core/de43/667c55c652dbc078566ca5b4447a6e7b.mp4?wsSecret=9edce025f15e66bb97a04c7e23ebf4e9&wsTime=1712654259'),
-      videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
-    );
+    _play();
+    // _videoPlayerController = VideoPlayerController.networkUrl(
+    //   Uri.parse('http://42.80.41.235:2280/qn-FfSu22hyxKSZLNho5DWYuMVYtWjsUJSk2XG0aLw4.vodkgeyttp8.vod.126.net/cloudmusic/3793/core/de43/72e551775eb78bfc7033e98894efa881.mp4?wsSecret=f9c5b8077d6d1f65b605b5e31bcae665&wsTime=1712906993'),
+    //   videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+    // );
   }
   
   Future _play() async {
@@ -69,136 +72,172 @@ class _MvPlayViewState extends State<MvPlayView> {
   _initMVController() async {
     // 获取到视频地址
     MvUrlModel? mv = await getMvExclusiveRcmd();
-    print('mv: ${mv!.data!.url}');
-    _videoPlayerController = VideoPlayerController.networkUrl(
-      Uri.parse(mv.data!.url!),
-      videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
-    );
+    if(mv != null){
+      // print('mv: ${mv.data!.url}');
+      // http://vodkgeyttp8.vod.126.net/cloudmusic/5045/core/d844/6d46dec1aa3d93a1b243abaf157e8c50.mp4?wsSecret=361a65879c84584920d3647f5ff4ab0d&wsTime=1713161520
 
-    started();
-    setState(() {
-      _playerState = VideoState.playing;
-    });
-    // _addControllerListener();
+      List<String> urlArr = mv.data!.url!.split('net');
+      // print(urlArr);
+
+      _videoPlayerController = VideoPlayerController.networkUrl(
+        Uri.parse('$playAdmin${urlArr[1]}'),
+        videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+      );
+
+      // _videoPlayerController = VideoPlayerController.asset('assets/test.mp4',
+      //   videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+      // );
+
+      started();
+      _addControllerListener();
+    }else{
+      setState(() {
+        isNetError = true;
+      });
+    }
   }
 
   void _addControllerListener() {
-    // videoListener = () {
-    //   print('--------------开始播放------------------');
-    //   if (!isTaping) {
-    //     setState(() {
-    //       position = _videoPlayerController!.value.position.inMilliseconds;
-    //     });
-    //   }
-
-    //   bool isPlaying = _videoPlayerController!.value.isPlaying;
-    //   if (_playerState == VideoState.playing && !isPlaying) {
-    //     setState(() {
-    //       _playerState = VideoState.paused;
-    //     });
-    //   }
-    // };
-
-    setState(() {
-      _playerState = VideoState.playing;
-    });
-
-    _videoPlayerController!.addListener(() {
-      if (startedPlaying && !_videoPlayerController!.value.isPlaying) {
-        print('--------------开始播放了---------');
+    videoListener = () {
+      if (startedPlaying && _videoPlayerController!.value.isPlaying) {
+        if(_playerState != VideoState.playing){
+          setState(() {
+            _playerState = VideoState.playing;
+          });
+        }
+        setState(() {
+          position = _videoPlayerController!.value.position.inMilliseconds;
+        });
       }
-    });
+
+      // bool isPlaying = _videoPlayerController!.value.isPlaying;
+      // if (_playerState == VideoState.playing && !isPlaying) {
+      //   setState(() {
+      //     _playerState = VideoState.paused;
+      //   });
+      // }
+    };
+    _videoPlayerController!.addListener(videoListener);
   }
 
   _getWidgetsByState(){
-    List<Widget> children = [];
     if ((_playerState == VideoState.playing ||_playerState == VideoState.paused)) {
-      print('VideoState.playing');
-      children.add(GestureDetector(
-        // onTap: () {
-        //   if (isShowButton) {
-        //     _showButtons(false);
-        //   } else {
-        //     _showButtonsAndAutoHide(autoHideTime, clearTimer: true);
-        //   }
-        // },
-        child: Container(
-          color: Colors.pink,
-          child: AspectRatio(
-                  aspectRatio: _videoPlayerController!.value.aspectRatio,
-                  child: VideoPlayer(_videoPlayerController!),
-               )),
-      ));
+      // print('_videoPlayerController!.value.aspectRatio: ${_videoPlayerController!.value.aspectRatio}');
+      return GestureDetector(
+        child: AspectRatio(
+          // aspectRatio: 16/9,
+          aspectRatio: _videoPlayerController!.value.aspectRatio,
+          child: VideoPlayer(_videoPlayerController!),
+        ),
+      );
+    }
 
-      // if (isShowButton) {
-      //   // 全屏按钮
-      //   children.add(_buildResizeButton());
-
-      //   // 进度条
-      //   children.add(_buildProgressBar());
-
-      //   if (widget.isFullScreen) {}
-      // }
+    if(isNetError){
+      return ElevatedButton(onPressed: (){
+        _initMVController();
+        setState(() {
+          isNetError = false;
+        });
+      }, child: const Text('重新加载'));
     }
 
     if (_playerState == VideoState.loading) {
-      children.add(const Center(child: CircularProgressIndicator()));
-    } 
-    // else if (isShowButton) {
-    //   // 播放按钮
-    //   children.add(_bulidPlayButton());
-    // }
-
-    return children;
+      return Image.asset('assets/images/placeholder.gif');
+    }
   }
 
   Future<bool> started() async {
     await _videoPlayerController!.initialize();
     await _videoPlayerController!.play();
+    await _videoPlayerController!.setLooping(true);
     startedPlaying = true;
     return true;
   }
 
   @override
   Widget build(BuildContext context) {
-    print('build');
+    // 获取屏幕信息
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
+    // 获取刘海屏的高度
+    safeAreaTop = mediaQueryData.padding.top;
+
     return Scaffold(
+      backgroundColor: const Color.fromRGBO(25, 24, 25, 1),
       body: PageView(
         scrollDirection: Axis.vertical,
         onPageChanged: (index){
-          print(index);
+          // print(index);
         },
         children: [
-            Stack(
-              // children: [
-              //   Center(
-              //     child: _getWidgetsByState(),
-              //   ),
-              //   _buildProgressBar(),
-              //   _buildResizeButton()
-              // ],
-              // children: _getWidgetsByState(),
-              children: [
-                Center(
-                  child: FutureBuilder<bool>(
-                    future: started(),
-                    builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                      if (snapshot.data ?? false) {
-                        return AspectRatio(
-                          aspectRatio: _videoPlayerController!.value.aspectRatio,
-                          child: VideoPlayer(_videoPlayerController!),
-                        );
-                      } else {
-                        return const Text('waiting for video to load');
-                      }
-                    },
+            InkWell(
+              onTap: (){
+                setState(() {
+                  isHide = !isHide;
+                });
+              },
+              child: Stack(
+                children: [
+                  isHide ? const Text('') : Align(
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      margin: EdgeInsets.only(top: safeAreaTop),
+                      child: ListTile(
+                        leading: IconButton(onPressed: (){
+                          Navigator.pop(context);
+                        }, icon: const Icon(Icons.arrow_back_outlined,color: Colors.white)),
+                        title: const Text('MV播放',style:TextStyle(color: Colors.white)),
+                      ),
+                    ),
                   ),
-                )
-              ]
+                  Center(
+                    child: _getWidgetsByState(),
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: _buildPlayOrPause(),
+                  ),
+                  isHide ? const Text('') : _buildProgressBar(),
+                  isHide ? const Text('') : _buildResizeButton()
+                ],
+              ),
             ),
         ]
       ),
     );
+  }
+
+  Widget _buildPlayOrPause(){
+    if(isHide || _playerState == VideoState.loading){
+      return const Text('');
+    }else{
+      if (_playerState == VideoState.paused) {
+        return IconButton(
+          onPressed: (){
+            _videoPlayerController!.play();
+            setState(() {
+              _playerState = VideoState.playing;
+            });
+          },
+          icon: Icon(
+            Icons.play_arrow,
+            color: Colors.white.withOpacity(0.5),size: 48
+          )
+        );
+      }else{
+          return  IconButton(
+            onPressed: (){
+              _videoPlayerController!.pause();
+              setState(() {
+                _playerState = VideoState.paused;
+              });
+            },
+            icon: Icon(
+              Icons.pause,
+              color: Colors.white.withOpacity(0.5),size: 48
+            )
+          );
+      }
+    }
   }
 
   Widget _buildResizeButton() {
@@ -214,7 +253,6 @@ class _MvPlayViewState extends State<MvPlayView> {
           color: Colors.white,
           // padding: const EdgeInsets.all(8.0),
           onPressed: () {
-            // widget.onResizePressed(_controller);
             _toggleFullScreen();
           },
         ));
@@ -234,8 +272,7 @@ class _MvPlayViewState extends State<MvPlayView> {
       alignment: Alignment.bottomCenter,
       child: Container(
         height: 100.0,
-        padding: const EdgeInsets.symmetric(vertical: 32.0),
-        // padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0, bottom: 32.0),
+        padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 8),
         child: MyProgressBar(
             duration: duration,
             position: position,
@@ -273,34 +310,40 @@ class _MvPlayViewState extends State<MvPlayView> {
   // }
 
   void _toggleFullScreen() {
-    print('---------切换----------');
+    // print('---------切换----------');
     setState(() {
       if (isFullScreen) {
         /// 如果是全屏就切换竖屏
         AutoOrientation.portraitAutoMode();
 
         ///显示状态栏，与底部虚拟操作按钮
-        SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+        // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+        SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]);
         // SystemChrome.setEnabledSystemUIOverlays(
         //     [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+        isHide = true;
       } else {
         AutoOrientation.landscapeAutoMode();
 
         ///关闭状态栏，与底部虚拟操作按钮
         // SystemChrome.setEnabledSystemUIOverlays([]);
-        // SystemChrome.setPreferredOrientations([
-        //     DeviceOrientation.portraitUp,
-        // ]);
-        SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]);
+        SystemChrome.setPreferredOrientations([
+            DeviceOrientation.portraitUp,
+        ]);
+        isHide = false;
+        // SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]);
       }
+      isFullScreen = !isFullScreen;
       // _startPlayControlTimer(); // 操作完控件开始计时隐藏
     });
   }
 
    @override
   void dispose() {
-    _videoPlayerController!.dispose();
-    _chewieController.dispose();
+    if(_videoPlayerController != null){
+      _videoPlayerController!.dispose();
+    }
+    // _chewieController.dispose();
     super.dispose();
   }
 }

@@ -22,12 +22,6 @@ class MyProgressBar extends StatefulWidget {
 }
 
 class _MyProgressBarState extends State<MyProgressBar> {
-
-  @override
-  void initState() {
-    super.initState();
-    print('MyProgressBar initState');
-  }
   
   @override
   Widget build(BuildContext context) {
