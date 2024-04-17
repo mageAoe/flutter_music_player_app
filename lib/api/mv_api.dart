@@ -77,8 +77,8 @@ class MVApi {
     static Future<MvUrlModel?> getMvUrl(String query) async {
     var res = await _httpClient.getJsonData(
       Api.URL_MV_URL, 
-      useCache: true,
-      checkCacheTimeout: true,
+      useCache: false,
+      checkCacheTimeout: false,
       query: query
     );
     if(res != null){
