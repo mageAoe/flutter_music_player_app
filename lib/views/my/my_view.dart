@@ -60,6 +60,7 @@ class _MyViewState extends State<MyView> with SingleTickerProviderStateMixin {
   // 获取用户的详情信息
   void getUserInfo() async {
     MyApi.getUserDetail('uid=${userInfoData.account?.id}').then((deatil){
+      print('============getUserInfo==============');
       if(deatil != null){
           userDetailData = deatil;
         }
