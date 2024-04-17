@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_music_player_app/custom_drawer/drawer_model.dart';
 import 'package:flutter_music_player_app/theme/app_theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_music_player_app/navigation_home_screen.dart';
@@ -34,6 +35,7 @@ _buildProvider() {
   return MultiProvider(
     providers: [
       ChangeNotifierProvider<Shop>.value(value: Shop()),
+      ChangeNotifierProvider<DrawerModel>.value(value: DrawerModel(280)),
       ChangeNotifierProvider<MusicController>.value(value: MusicController()),
     ],
     child: const MyApp(),
