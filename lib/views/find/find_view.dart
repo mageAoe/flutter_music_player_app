@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_music_player_app/custom_drawer/drawer_model.dart';
 import 'package:flutter_music_player_app/theme/app_theme.dart';
 import 'package:flutter_music_player_app/widgets/find_widget.dart';
 import 'package:flutter_music_player_app/api/find_api.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_music_player_app/theme/public_style.dart';
 import 'package:flutter_music_player_app/utlis/fonts.dart';
 import 'package:flutter_music_player_app/views/singer/singer_view.dart';
 import 'package:flutter_music_player_app/views/search/search_view.dart';
+import 'package:provider/provider.dart';
 
 
 
@@ -22,6 +24,8 @@ class _FindViewState extends State<FindView> {
 
   double safeAreaTop = 0.0;
   List<Banners> banner = <Banners>[];
+  late DrawerModel drawerModel;
+
   List menuList = [
     {'title': '每日推荐', 'icon': const Icon(YunMusicFont.ziyuan16, color: AppTheme.primary, size: 30)},
     {'title': '排行榜', 'icon': const Icon(YunMusicFont.panhangbang, color: AppTheme.primary, size: 30)},
@@ -41,6 +45,8 @@ class _FindViewState extends State<FindView> {
       }
     });
     print('===========find=========');
+
+    drawerModel = Provider.of<DrawerModel>(context, listen: false);
     super.initState();
   }
 
@@ -66,7 +72,9 @@ class _FindViewState extends State<FindView> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Icon(Icons.menu, color: Colors.white),
+                        IconButton(onPressed: (){
+                          drawerModel.toggleDrawer(value: false);
+                        }, icon: const Icon(Icons.menu, color: Colors.white)),
                         SearchWidget(
                           onTap: () {
                             Navigator.push(context, MaterialPageRoute(builder: (context) => const SearchView()));

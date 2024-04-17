@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_music_player_app/custom_drawer/drawer_model.dart';
+import 'package:provider/provider.dart';
 import './home_drawer.dart';
 import 'package:flutter_music_player_app/theme/app_theme.dart';
 import 'package:flutter_music_player_app/utlis/enum_setting.dart';
@@ -35,6 +37,7 @@ class _DrawerUserControllerState extends State<DrawerUserController> with Ticker
   AnimationController? animationController;
 
   double scrolloffset = 0.0;
+  late DrawerModel drawerModel;
 
   @override
   void initState() {
@@ -44,8 +47,7 @@ class _DrawerUserControllerState extends State<DrawerUserController> with Ticker
     iconAnimationController ?.animateTo(1.0,duration: const Duration(milliseconds: 0),curve: Curves.fastOutSlowIn);
 
     scrollController = ScrollController(initialScrollOffset: widget.drawerWidth);
-    scrollController!
-      .addListener(() {
+    scrollController!.addListener(() {
         if (scrollController!.offset <= 0) {
           if (scrolloffset != 1.0) {
             setState(() {
@@ -55,11 +57,9 @@ class _DrawerUserControllerState extends State<DrawerUserController> with Ticker
               } catch (_) {}
             });
           }
-          iconAnimationController?.animateTo(0.0,
-              duration: const Duration(milliseconds: 0),
-              curve: Curves.fastOutSlowIn);
-        } else if (scrollController!.offset > 0 &&
-            scrollController!.offset < widget.drawerWidth.floor()) {
+          iconAnimationController?.animateTo(0.0,duration: const Duration(milliseconds: 0),curve: Curves.fastOutSlowIn);
+
+        } else if (scrollController!.offset > 0 && scrollController!.offset < widget.drawerWidth.floor()) {
           iconAnimationController?.animateTo(
               (scrollController!.offset * 100 / (widget.drawerWidth)) / 100,
               duration: const Duration(milliseconds: 0),
@@ -73,14 +73,18 @@ class _DrawerUserControllerState extends State<DrawerUserController> with Ticker
               } catch (_) {}
             });
           }
-          iconAnimationController?.animateTo(1.0,
-              duration: const Duration(milliseconds: 0),
-              curve: Curves.fastOutSlowIn);
+          iconAnimationController?.animateTo(1.0, duration: const Duration(milliseconds: 0), curve: Curves.fastOutSlowIn);
         }
-      });
+    });
+
+    // 共享数据
+    drawerModel = Provider.of<DrawerModel>(context, listen: false);
+    drawerModel.setScrollController(scrollController!);
 
     super.initState();
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +113,8 @@ class _DrawerUserControllerState extends State<DrawerUserController> with Ticker
                         iconAnimationController: iconAnimationController,
                         screenIndex: widget.screenIndex,
                         callBackIndex: (DrawerIndex indexType) {
-                          onDrawerClick();
+                          // onDrawerClick();
+                          drawerModel.toggleDrawer();
                           try {
                             widget.onDrawerCall!(indexType);
                           } catch (e) {}
@@ -150,20 +155,20 @@ class _DrawerUserControllerState extends State<DrawerUserController> with Ticker
     );
   }
 
-  void onDrawerClick() {
-    //if scrollcontroller.offset != 0.0 then we set to closed the drawer(with animation to offset zero position) if is not 1 then open the drawer
-    if (scrollController!.offset != 0.0) {
-      scrollController?.animateTo(
-        0.0,
-        duration: const Duration(milliseconds: 400),
-        curve: Curves.fastOutSlowIn,
-      );
-    } else {
-      scrollController?.animateTo(
-        widget.drawerWidth,
-        duration: const Duration(milliseconds: 400),
-        curve: Curves.fastOutSlowIn,
-      );
-    }
-  }
+  // void onDrawerClick() {
+  //   //if scrollcontroller.offset != 0.0 then we set to closed the drawer(with animation to offset zero position) if is not 1 then open the drawer
+  //   if (scrollController!.offset != 0.0) {
+  //     scrollController?.animateTo(
+  //       0.0,
+  //       duration: const Duration(milliseconds: 400),
+  //       curve: Curves.fastOutSlowIn,
+  //     );
+  //   } else {
+  //     scrollController?.animateTo(
+  //       widget.drawerWidth,
+  //       duration: const Duration(milliseconds: 400),
+  //       curve: Curves.fastOutSlowIn,
+  //     );
+  //   }
+  // }
 }
