@@ -149,6 +149,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
               },
             ),
           ),
+          ElevatedButton(onPressed: (){}, child: const Text('退出登录'))
         ],
       )
     );
