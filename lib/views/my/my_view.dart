@@ -62,7 +62,9 @@ class _MyViewState extends State<MyView> with SingleTickerProviderStateMixin {
     MyApi.getUserDetail('uid=${userInfoData.account?.id}').then((deatil){
       print('============getUserInfo==============');
       if(deatil != null){
-          userDetailData = deatil;
+          setState(() {
+            userDetailData = deatil;
+          });
         }
     });
   }

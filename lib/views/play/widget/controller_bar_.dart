@@ -29,7 +29,7 @@ class _ControllerBarViewState extends State<ControllerBarView> {
   // 将要播放和正在播放，用于播放按钮的状态控制。
   // 中途切歌会调用一下stoppted
   bool isGoingPlaying() {
-    print('widget.playerState: ${widget.playerState}');
+    // print('widget.playerState: ${widget.playerState}');
     return widget.playerState != PlayerState.paused;
   }
 
